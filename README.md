@@ -22,4 +22,6 @@ http-server &
 ```
 
 Which will run the server on [http://localhost:8080]( http://localhost:8080).
-These steps are documented in the D3 [wiki](https://github.com/d3/d3/wiki).
+These steps are documented in the D3 [wiki](https://github.com/d3/d3/wiki).  
+The application will look like this:  
+![application](https://imgur.com/a/r9bhXv3)
