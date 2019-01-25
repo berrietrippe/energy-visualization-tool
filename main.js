@@ -10,6 +10,7 @@ class Graph {
         this.path_to_csv = path_to_csv;
         this.topics = topics;
         this.xAxis = xAxisId;
+        $("#o-filename-1").html(path_to_csv);
     }
 
     setupData(){
@@ -65,7 +66,7 @@ class Graph {
     }
 
     /**
-     *
+     * Draws a chart for this Graph
      * @param data
      * @param topics
      * @param selector

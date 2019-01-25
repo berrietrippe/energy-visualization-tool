@@ -43,6 +43,12 @@ function getValues(row, keys){
     return entry;
 }
 
+/**
+ *
+ * @param topics
+ * @param topicsToRemove
+ * @returns {Array}
+ */
 function abstractUnusedTopics(topics, topicsToRemove){
     arr = [];
     for (let i = 0; i < topics.length; i++){
@@ -55,6 +61,13 @@ function abstractUnusedTopics(topics, topicsToRemove){
     return arr;
 }
 
+/**
+ *
+ * @param data
+ * @param layers
+ * @param topics
+ * @returns {number}
+ */
 function getMaxVal(data, layers, topics) {
     let max = 0;
 
@@ -94,7 +107,7 @@ function updateTopics(graphId, topicId){
 }
 
 /**
- *
+ * Updates the list of topics
  * @param graphId
  * @param topics
  * @param xAxis
@@ -111,12 +124,13 @@ function updateTopicList(graphId, topics, xAxis){
     }
 }
 
+// says hi :)
 function sayHi(){
     console.log("hi");
 }
 
 /**
- *
+ * First drawChart
  * @param data
  */
 function drawChart(data){
@@ -136,7 +150,11 @@ function drawChart(data){
         .text(function(d) { return d; });
 }
 
-
+/**
+ * Adds data to a table
+ * @param selector
+ * @param data
+ */
 function showTable(selector, data){
 
     let table = $(selector);
@@ -177,6 +195,10 @@ function showTable(selector, data){
     table.append(sb);
 }
 
+/**
+ * Adds a simple message to the console output
+ * @param message, to be added to the console
+ */
 function addConsoleMessage(message){
     let console = $("#o-console");
     let d = new Date();
@@ -188,6 +210,11 @@ function addConsoleMessage(message){
     console.html(content);
 }
 
+/**
+ * Returns a color from a list
+ * @param i index
+ * @returns {string}
+ */
 function getRandomColor(i){
     let colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#00B3E6',
         '#e65cbe', '#3366E6', '#999966', '#99FF99', '#B34D4D',
