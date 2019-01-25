@@ -17,4 +17,52 @@ body, html {
     -o-transform: translateY(-50%);
     transform: translateY(-50%); }
 
+.chart {
+  margin: 0 auto;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding-top: 32px;
+  padding-left: 20px;
+  padding-bottom: 20px; }
+  .chart h5 {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .chart .o-axis {
+    position: absolute; }
+  .chart .o-axis.o-y-axis {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 20px; }
+    .chart .o-axis.o-y-axis .o-label {
+      position: relative;
+      top: 50%;
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+      transform: rotate(-90deg);
+      color: black; }
+  .chart .o-axis.o-x-axis {
+    bottom: 0;
+    left: 0;
+    height: 20px;
+    width: 100%; }
+
+.chart > div {
+  font: 10px sans-serif;
+  text-align: right;
+  padding: 3px;
+  /* margin: 0.5px; */
+  width: 0.5px;
+  display: inline-block;
+  height: 0;
+  transition: 0.2s;
+  color: rgba(0, 0, 0, 0);
+  vertical-align: bottom; }
+
 /*# sourceMappingURL=style.css.map */
