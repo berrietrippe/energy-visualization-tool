@@ -8,12 +8,18 @@
 d3.csv("data/Energiebalans__aanbod__verbruik_17012019_164739.csv", function(data){
     let parsedData = parseData(data);
     drawChart1(parsedData);
+    // drawChart2();
 });
+
+let max_value = 0;
 
 function parseData(data){
     let arr = [];
     for (let i = 0; i < data.length; i++){
         let value = data[i]["Energieaanbod/Winning (PJ)"];
+        if (value > max_value){
+            max_value = value;
+        }
         let date = new Date(data[i]["Perioden"]);
         arr.push(
             {
@@ -59,14 +65,18 @@ function drawChart1(data) {
             "translate(" + margin.left + "," + margin.top + ")"
         );
 
-    let x = d3.scaleTime().rangeRound([0, width]);
-    let y = d3.scaleLinear().rangeRound([height, 0]);
+    let x = d3.scaleTime().range([0, width]);
+    let y = d3.scaleLinear()
+        .domain([0, max_value]) // input
+        .range([height, 0]); // output
+
 
     let line = d3.line()
         .x(function(d) { return x(d.date)})
-        .y(function(d) { return y(d.value)});
+        .y(function(d) { return y(d.value)})
+        .curve(d3.curveMonotoneX); // apply smoothing to the line
     x.domain(d3.extent(data, function(d) { return d.date }));
-    y.domain(d3.extent(data, function(d) { return d.value }));
+    // y.domain(d3.extent(data, function(d) { return d.value }));
 
 
     g.append("g")
