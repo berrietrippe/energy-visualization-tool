@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="style/style.css">
-    <script src="https://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <title>2IMV20 Energy Visualization</title>
 </head>
 <body>
@@ -33,11 +33,12 @@
             <div class="container-fluid h-100">
                 <div class="row pb-3 h-75">
                     <div id="o-chart-1" class="col h-100 p-3">
-                        <div class="chart h-100 w-100">
-                            <h5>Total energy production per year</h5>
-                            <!--<div class="o-axis o-y-axis"><div class="o-label">Energy production</div></div>-->
-                            <!--<div class="o-axis o-x-axis"><div class="o-label">Year</div></div>-->
-                        </div>
+                        <!--<div class="chart h-100 w-100">-->
+                            <!--<h5>Total energy production per year</h5>-->
+                            <!--&lt;!&ndash;<div class="o-axis o-y-axis"><div class="o-label">Energy production</div></div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="o-axis o-x-axis"><div class="o-label">Year</div></div>&ndash;&gt;-->
+                        <!--</div>-->
+                        <svg id="o-line-chart-1" class="line-chart w-100 h-100"></svg>
                     </div>
                     <div class="col-2 h-100 p-3">
                         <div class="o-visualization">
