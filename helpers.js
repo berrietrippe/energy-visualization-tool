@@ -159,7 +159,11 @@ function showTable(selector, data){
             }
             sb += "<" + cell + ">";
 
-            sb += data[i][key];
+            if (j == 0) {
+                sb += data[i][key].getFullYear();
+            } else {
+                sb += data[i][key];
+            }
 
             sb += "</" + cell + ">";
             j++;
