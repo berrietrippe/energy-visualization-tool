@@ -156,10 +156,13 @@ class Graph {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .attr("d", topic.line)); // apply smoothing to the line);
+        addConsoleMessage("Line for '" + topic.name + "' category added <div class='c-bullet' style='background-color:" + topic.color + ";'></div>");
     }
 
-    removeLine(topidId){
-        this.topics[topidId].path.remove();
+    removeLine(topicId){
+        let topic = this.topics[topicId];
+        topic.path.remove();
+        addConsoleMessage("Line for '" + topic.name + "' category removed");
     }
 
     updateGraphTopicList(){
@@ -232,4 +235,4 @@ totalGraph.updateGraphTopicList();
 
 graphs.push(totalGraph);
 
-console.log("Succesfully set-up graph!");
+addConsoleMessage("Succesfully set-up graph!");

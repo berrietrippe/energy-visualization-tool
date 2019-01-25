@@ -171,5 +171,15 @@ function showTable(selector, data){
     sb += "</tbody>";
 
     table.append(sb);
+}
 
+function addConsoleMessage(message){
+    let console = $("#o-console");
+    let d = new Date();
+    let datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2)+ ":" + ("0" + d.getSeconds()).slice(-2);
+    let content = console.html();
+    content = message + "<br>" + content;
+    content = "<span> > "  + datestring + ":</span><br>" + content;
+    console.html(content);
 }

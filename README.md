@@ -1,7 +1,7 @@
 # 2IMV20
 Visualization web application for the course 2IMV20 Visualization. 
 
-![application](https://i.imgur.com/fTdsBVg.png).  
+![application](https://i.imgur.com/K4fEDH2.jpg).  
 
 ## Installation
 
