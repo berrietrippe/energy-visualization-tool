@@ -3,28 +3,33 @@
  */
 
 
-
-
-d3.csv("data/Energiebalans__aanbod__verbruik_17012019_164739.csv", function(data){
+d3.csv("data/Energiebalans__aanbod__verbruik_25012019_115042.csv", function(data){
     let parsedData = parseData(data);
-    drawChart1(parsedData);
+    drawLineChart(parsedData, "#o-line-chart-1");
     // drawChart2();
 });
 
 let max_value = 0;
 
 function parseData(data){
+    console.log(data);
     let arr = [];
     for (let i = 0; i < data.length; i++){
-        let value = data[i]["Energieaanbod/Winning (PJ)"];
-        if (value > max_value){
-            max_value = value;
+        let productionValue = Math.round(data[i]["Energieaanbod/Winning (PJ)"]);
+        if (productionValue > max_value){
+            max_value = productionValue;
+        }
+        let importValue = Math.round(data[i]["Totaal energieverbruik (PJ)"]);
+        if (importValue > max_value){
+            max_value = importValue;
         }
         let date = new Date(data[i]["Perioden"]);
+        console.log(date + ", " + productionValue + ", " + importValue);
         arr.push(
             {
                 date: date,
-                value: + value
+                production: + productionValue,
+                import: + importValue
             });
     }
 
@@ -49,16 +54,26 @@ function drawChart(data){
 }
 
 
-function drawChart1(data) {
-    let svgWidth = $("#o-line-chart-1").width();
-    let svgHeight = $("#o-line-chart-1").height();
-    let margin = { top: 20, right: 20, bottom: 30, left: 50 };
+function drawLineChart(data, selector) {
+    // Get the dimensions of the SVG
+    let svgWidth = $(selector).width();
+    let svgHeight = $(selector).height();
+    let margin = { top: 40, right: 20, bottom: 30, left: 50 };
     let width = svgWidth - margin.left - margin.right;
     let height = svgHeight - margin.top - margin.bottom;
     // var svgWidth = 1000, svgHeight = 600;
-    let svg = d3.select('svg')
+    let svg = d3.select(selector)
         .attr("width", width)
         .attr("height", height);
+
+    svg.append("text")
+        .attr("x", (svgWidth/ 2))
+        .attr("y", (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .attr("fill", "#000")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("Energy insights");
 
     let g = svg.append("g")
         .attr("transform",
@@ -71,9 +86,16 @@ function drawChart1(data) {
         .range([height, 0]); // output
 
 
-    let line = d3.line()
+    let productionLine = d3.line()
         .x(function(d) { return x(d.date)})
-        .y(function(d) { return y(d.value)})
+        .y(function(d) { return y(d.production)})
+        .curve(d3.curveMonotoneX); // apply smoothing to the line
+    x.domain(d3.extent(data, function(d) { return d.date }));
+    // y.domain(d3.extent(data, function(d) { return d.value }));
+
+    let importLine = d3.line()
+        .x(function(d) { return x(d.date)})
+        .y(function(d) { return y(d.import)})
         .curve(d3.curveMonotoneX); // apply smoothing to the line
     x.domain(d3.extent(data, function(d) { return d.date }));
     // y.domain(d3.extent(data, function(d) { return d.value }));
@@ -102,5 +124,14 @@ function drawChart1(data) {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
-        .attr("d", line);
+        .attr("d", productionLine);
+
+    g.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "orange")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.5)
+        .attr("d", importLine);
 }
