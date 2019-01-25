@@ -1,4 +1,4 @@
-﻿"Energiedragers","Perioden","Energieaanbod/Winning (PJ)","Energieaanbod/Invoer (PJ)","Energieaanbod/Uitvoer (PJ)","Totaal energieverbruik (PJ)"
+﻿"Energiedragers","Perioden","Winning","Invoer","Uitvoer","Energieverbruik"
 "Totaal energiedragers","1970",1225,,,2016
 "Totaal energiedragers","1971",1584,,,2144
 "Totaal energiedragers","1972",2023,,,2451
@@ -46,4 +46,4 @@
 "Totaal energiedragers","2014",2554.9,9333.7,8101.5,3039.7
 "Totaal energiedragers","2015",2036.2,10272.2,8445.1,3107.8
 "Totaal energiedragers","2016",1958.5,10298,8597.4,3139.2
-"Totaal energiedragers","2017**",1776,10472.6,8498.4,3150.6
+"Totaal energiedragers","2017",1776,10472.6,8498.4,3150.6

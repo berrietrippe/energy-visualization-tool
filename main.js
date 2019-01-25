@@ -1,156 +1,236 @@
-/*
 
+let graphs = [];
+
+/**
+ * Graph class used to represent a graph in our application
  */
-
-
-d3.csv("data/Energiebalans__aanbod__verbruik_25012019_115042.csv", function(data){
-    let parsedData = parseData(data);
-    drawLineChart(parsedData, "#o-line-chart-1");
-    // drawChart2();
-});
-
-let max_value = 0;
-
-function parseData(data){
-    console.log(data);
-    let arr = [];
-    for (let i = 0; i < data.length; i++){
-        let productionValue = Math.round(data[i]["Energieaanbod/Winning (PJ)"]);
-        if (productionValue > max_value){
-            max_value = productionValue;
-        }
-        let importValue = Math.round(data[i]["Totaal energieverbruik (PJ)"]);
-        if (importValue > max_value){
-            max_value = importValue;
-        }
-        let date = new Date(data[i]["Perioden"]);
-        console.log(date + ", " + productionValue + ", " + importValue);
-        arr.push(
-            {
-                date: date,
-                production: + productionValue,
-                import: + importValue
-            });
+class Graph {
+    constructor(id, path_to_csv, topics, xAxisId){
+        this.id = id;
+        this.path_to_csv = path_to_csv;
+        this.topics = topics;
+        this.xAxis = xAxisId;
     }
 
-    return arr;
-}
+    setupData(){
+        let id = this.id;
+        let xAxis = this.xAxis;
 
-function drawChart(data){
-    var x = width/data.length;
+        let topicList = [];
+        for (let i = 0; i < this.topics.length; i++){
+                topicList.push(this.topics[i].name);
+        }
+        let graph = this;
+        let topics = this.topics;
+        d3.csv(this.path_to_csv, function(data){
+            graph.setData(data);
+            console.log(data);
+            let parsedData = parseData(data, topicList);
+            console.log(topicList);
+            let maxValue = getMaxVal(parsedData, 2, topicList);
+            graph.setupChart(parsedData, topics, "#o-chart-" + id, maxValue, xAxis);
+            graph.showAllSelectedTopics();
+        });
+    }
 
-    var y = d3.scale.linear()
-        .domain([0, d3.max(data)])
-        .range([0, height]);
+    getId() {
+        return this.id;
+    }
 
-    d3.select(".chart")
-        .selectAll("div")
-        .data(data)
-        .enter().append("div")
-        .style("height", function(d) { return y(d) + "px"; })
-        .style("width", function(d) { return x + "px"; })
-        .style("background-color", function(d) { return "#007bff"})
-        .text(function(d) { return d; });
-}
+    getPathToCSV(){
+        return this.path_to_csv;
+    }
 
+    getSelectedTopics(){
+        return this.selectedTopics;
+    }
 
-function drawLineChart(data, selector) {
-    // Get the dimensions of the SVG
-    let svgWidth = $(selector).width();
-    let svgHeight = $(selector).height();
-    let margin = { top: 40, right: 20, bottom: 30, left: 50 };
-    let width = svgWidth - margin.left - margin.right;
-    let height = svgHeight - margin.top - margin.bottom;
-    // var svgWidth = 1000, svgHeight = 600;
-    let svg = d3.select(selector)
-        .attr("width", width)
-        .attr("height", height);
+    setData(data){
+        this.data = data;
+    }
 
-    svg.append("text")
-        .attr("x", (svgWidth/ 2))
-        .attr("y", (margin.top / 2))
-        .attr("text-anchor", "middle")
-        .attr("fill", "#000")
-        .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("Energy insights");
+    setPathToCSV(path_to_csv){
+        this.path_to_csv = path_to_csv;
+    }
 
-    let g = svg.append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")"
-        );
+    setTopics(topics){
+        this.topics = topics;
+    }
 
-    let x = d3.scaleTime().range([0, width]);
-    let y = d3.scaleLinear()
-        .domain([0, max_value]) // input
-        .range([height, 0]); // output
+    setSelectedTopics(topics){
+        this.selectedTopics = topics;
+    }
 
+    setXAxis(xAxis){
+        this.xAxis = xAxis;
+    }
 
-    let productionLine = d3.line()
-        .x(function(d) { return x(d.date)})
-        .y(function(d) { return y(d.production)})
-        .curve(d3.curveMonotoneX); // apply smoothing to the line
-    x.domain(d3.extent(data, function(d) { return d.date }));
-    // y.domain(d3.extent(data, function(d) { return d.value }));
+    /**
+     *
+     * @param data
+     * @param topics
+     * @param selector
+     * @param maxValue
+     * @param xAxis
+     */
+    setupChart(data, topics, selector, maxValue, xAxis) {
+        // Get the dimensions of the SVG
+        let svgWidth = $(selector).width();
+        let svgHeight = $(selector).height();
+        let margin = { top: 40, right: 20, bottom: 30, left: 50 };
+        let width = svgWidth - margin.left - margin.right;
+        let height = svgHeight - margin.top - margin.bottom;
+        // var svgWidth = 1000, svgHeight = 600;
+        this.svg = d3.select(selector)
+            .attr("width", width)
+            .attr("height", height);
 
-    let importLine = d3.line()
-        .x(function(d) { return x(d.date)})
-        .y(function(d) { return y(d.import)})
-        .curve(d3.curveMonotoneX); // apply smoothing to the line
-    x.domain(d3.extent(data, function(d) { return d.date }));
-    // y.domain(d3.extent(data, function(d) { return d.value }));
+        this.svg.append("text")
+            .attr("x", (svgWidth/ 2))
+            .attr("y", (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .attr("fill", "#000")
+            .style("font-size", "16px")
+            .style("text-decoration", "underline")
+            .text("Energy insights");
 
+        this.g = this.svg.append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")"
+            );
 
-    g.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
-        .select(".domain");
+        let x = d3.scaleTime().range([0, width]);
+        let y = d3.scaleLinear()
+            .domain([0, maxValue])
+            .range([height, 0]);
+
+        console.log(data);
+
+        x.domain(d3.extent(data, function(d) {
+            console.log(d.Perioden);
+            return d.Perioden}));
+
+        for (let i = xAxis; i < topics.length; i++){
+            // y.domain(d3.extent(data, function(d) { return d.value }));
+            let line = d3.line()
+                .x(function(d) {
+                    return x(d.Perioden);
+                })
+                .y(function(d) {
+                    return y(d[topics[i].name])
+                })
+                .curve(d3.curveMonotoneX);
+
+            topics[i].setLine(line);
+        }
+
+        this.g.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x))
+            .select(".domain");
         // .remove();
 
-    g.append("g")
-        .call(d3.axisLeft(y))
-        .append("text")
-        .attr("fill", "#000")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
-        .attr("text-anchor", "end")
-        .text("Production (PJ)");
+        this.g.append("g")
+            .call(d3.axisLeft(y))
+            .append("text")
+            .attr("fill", "#000")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("Energy (PJ)");
+    }
 
-    g.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
-        .attr("d", productionLine);
+    showAllSelectedTopics(){
+        for (let i = this.xAxis; i < this.topics.length; i++) {
+            if (this.topics[i].isSelected()){
+                this.showLine(i);
+            }
+        }
+    }
 
-    g.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "orange")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
-        .attr("d", importLine);
+    showLine(topicId){
+        let topic = this.topics[topicId];
+        topic.setPath(this.g.append("path")
+            .datum(this.data)
+            .attr("fill", "none")
+            .attr("stroke", topic.color)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 1.5)
+            .attr("d", topic.line)); // apply smoothing to the line);
+    }
 
-    let ordinal = d3.scaleOrdinal()
-        .domain(["winning", "verbruik"])
-        .range([ "steelblue", "orange"]);
+    removeLine(topidId){
+        this.topics[topidId].path.remove();
+    }
 
+    updateGraphTopicList(){
+        updateTopicList(this.id, this.topics, this.xAxis);
+    }
 
-    let legend = svg.append("g")
-        .attr("class", "legendOrdinal")
-        .attr("transform", "translate(" + (width - 30) + " , " + (height - 10) + " )");
+    topicCallback(topicId){
+        let topic = this.topics[topicId];
+        let selected = topic.selected;
+        if (selected){
+            this.removeLine(topicId);
+        } else {
+            this.showLine(topicId);
+        }
+        this.topics[topicId].switchSelected();
+    }
 
-    let legendOrdinal = d3.legendColor()
-        .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
-        .shapePadding(10)
-        //use cellFilter to hide the "e" cell
-        .cellFilter(function(d){ return d.label !== "e" })
-        .scale(ordinal);
-
-    legend.call(legendOrdinal);
 
 }
+
+/**
+ * Topic class
+ */
+class Topic {
+    constructor(name, selected, color){
+        this.name = name;
+        this.selected = selected;
+        this.color = color;
+    }
+
+    isSelected(){
+        return this.selected;
+    }
+
+    setSelected(state){
+        this.selected = state;
+    }
+
+    switchSelected(){
+        let state = this.selected;
+        state = !state;
+        this.setSelected(state);
+    }
+
+    setLine(line){
+        this.line = line;
+    }
+
+    setPath(path){
+        this.path = path;
+    }
+}
+
+// Add the first graph
+let totalGraph = new Graph(
+    0,
+    "data/Energiebalans__aanbod__verbruik_25012019_115042.csv",
+    [
+        new Topic("Perioden", true, "red"),
+        new Topic("Winning", true, "steelblue"),
+        new Topic("Invoer", false, "brown"),
+        new Topic("Uitvoer", false, "green"),
+        new Topic("Energieverbruik", false, "orange")
+    ],
+    1
+);
+
+totalGraph.setupData();
+totalGraph.updateGraphTopicList();
+
+graphs.push(totalGraph);

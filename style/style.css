@@ -68,4 +68,22 @@ body, html {
 .line-chart {
   border: 1px solid lightgray; }
 
+.s-border {
+  border: 1px solid lightgray; }
+
+.o-selector-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+  .o-selector-list li {
+    margin-bottom: 3px; }
+    .o-selector-list li input {
+      margin-right: 10px; }
+    .o-selector-list li .c-bullet {
+      height: 10px;
+      width: 10px;
+      border-radius: 2px;
+      margin-left: 8px;
+      display: inline-block; }
+
 /*# sourceMappingURL=style.css.map */
