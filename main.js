@@ -91,7 +91,7 @@ class Graph {
             .attr("fill", "#000")
             .style("font-size", "16px")
             .style("text-decoration", "underline")
-            .text("Title");
+            .text("Dutch national energy statistics");
 
         this.g = this.svg.append("g")
             .attr("transform",
