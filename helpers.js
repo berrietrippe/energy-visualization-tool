@@ -14,7 +14,6 @@ function getTopics(data){
  * @returns {Array}
  */
 function parseData(data, keys){
-    console.log(data);
     let arr = [];
 
     for (let i = 0; i < data.length; i++){
@@ -33,7 +32,12 @@ function getValues(row, keys){
     let entry = {};
     for (let i = 0; i < keys.length; i ++){
         let value = row[keys[i]];
-        value = Math.round(row[keys[i]]);
+        if (keys[i] == "Perioden"){
+        // if (false){
+            value = new Date(value);
+        } else {
+            value = Math.round(row[keys[i]]);
+        }
         entry[keys[i]] = value;
     }
     return entry;
@@ -66,8 +70,10 @@ function getMaxVal(data, layers, topics) {
         for (let i = 0; i < topics.length; i++){
             let value = data[topics[i]];
             if (!isNaN(value)){
-                if (value > max){
-                    max = value;
+                if (topics[i] != "Perioden"){
+                    if (value > max){
+                        max = value;
+                    }
                 }
             }
         }
@@ -128,4 +134,42 @@ function drawChart(data){
         .style("width", function(d) { return x + "px"; })
         .style("background-color", function(d) { return "#007bff"})
         .text(function(d) { return d; });
+}
+
+
+function showTable(selector, data){
+
+    let table = $(selector);
+    let sb = "<thead>";
+    sb += "<tr>";
+    for (let key in data[0]){
+        sb += "<th scope='col'>" + key + "</th>";
+    }
+    sb += "</tr>";
+    sb += "</thead>";
+    sb += "<tbody>";
+
+    for (let i = 0; i < data.length; i++){
+        sb += "<tr>";
+        let j = 0;
+        for (let key in data[i]){
+            let cell = "td";
+            if (j == 0){
+                cell = "th scope='row'";
+            }
+            sb += "<" + cell + ">";
+
+            sb += data[i][key];
+
+            sb += "</" + cell + ">";
+            j++;
+        }
+        sb += "</tr>";
+    }
+
+
+    sb += "</tbody>";
+
+    table.append(sb);
+
 }

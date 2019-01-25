@@ -23,13 +23,12 @@ class Graph {
         let graph = this;
         let topics = this.topics;
         d3.csv(this.path_to_csv, function(data){
-            graph.setData(data);
-            console.log(data);
             let parsedData = parseData(data, topicList);
-            console.log(topicList);
+            graph.setData(parsedData);
             let maxValue = getMaxVal(parsedData, 2, topicList);
             graph.setupChart(parsedData, topics, "#o-chart-" + id, maxValue, xAxis);
             graph.showAllSelectedTopics();
+            showTable("#o-data-table-1", parsedData);
         });
     }
 
@@ -104,11 +103,6 @@ class Graph {
             .domain([0, maxValue])
             .range([height, 0]);
 
-        console.log(data);
-
-        x.domain(d3.extent(data, function(d) {
-            console.log(d.Perioden);
-            return d.Perioden}));
 
         for (let i = xAxis; i < topics.length; i++){
             // y.domain(d3.extent(data, function(d) { return d.value }));
@@ -123,6 +117,9 @@ class Graph {
 
             topics[i].setLine(line);
         }
+
+        x.domain(d3.extent(data, function(d) {
+            return d.Perioden}));
 
         this.g.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -234,3 +231,5 @@ totalGraph.setupData();
 totalGraph.updateGraphTopicList();
 
 graphs.push(totalGraph);
+
+console.log("Succesfully set-up graph!");
