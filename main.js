@@ -134,4 +134,23 @@ function drawLineChart(data, selector) {
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("d", importLine);
+
+    let ordinal = d3.scaleOrdinal()
+        .domain(["winning", "verbruik"])
+        .range([ "steelblue", "orange"]);
+
+
+    let legend = svg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(" + (width - 30) + " , " + (height - 10) + " )");
+
+    let legendOrdinal = d3.legendColor()
+        .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+        .shapePadding(10)
+        //use cellFilter to hide the "e" cell
+        .cellFilter(function(d){ return d.label !== "e" })
+        .scale(ordinal);
+
+    legend.call(legendOrdinal);
+
 }
