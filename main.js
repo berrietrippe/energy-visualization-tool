@@ -217,16 +217,19 @@ class Topic {
 }
 
 // Add the first graph
+
+let topics = [];
+let titles = ["Perioden","Aanbod","Winning","Invoer","Uitvoer","Invoersaldo","Bunkering"];
+
+
+for (let i = 0; i < titles.length; i++){
+    topics.push(new Topic(titles[i], false, getRandomColor(i)));
+}
+
 let totalGraph = new Graph(
     0,
-    "data/Energiebalans__aanbod__verbruik_25012019_115042.csv",
-    [
-        new Topic("Perioden", true, "red"),
-        new Topic("Winning", true, "steelblue"),
-        new Topic("Invoer", false, "brown"),
-        new Topic("Uitvoer", false, "green"),
-        new Topic("Energieverbruik", false, "orange")
-    ],
+    "data/Energiebalans__aanbod__verbruik_25012019_214558.csv",
+    topics,
     1
 );
 
