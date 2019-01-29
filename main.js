@@ -1,48 +1,71 @@
 
 let graphs = [];
 
+let GRAPHCOUNT = 0;
+
 /**
  * Graph class used to represent a graph in our application
  */
 class Graph {
-    constructor(id, path_to_csv, topics, xAxisId){
+    constructor(id, title, path_to_csv, selectors, topics, xAxisId){
+
+        // auto increment iets
+        if (id == null){
+            id = GRAPHCOUNT;
+            GRAPHCOUNT++;
+        }
+
+        // set variables
         this.id = id;
+
         this.path_to_csv = path_to_csv;
+        this.selectors = selectors;
         this.topics = topics;
         this.xAxis = xAxisId;
-        $("#o-filename-1").html(path_to_csv);
+        this.possibleSelectors = selectors;
+
+        // if no title specified, create a title
+        if (title == null) {
+            this.getNewTitle();
+        }
+
+        this.title = title;
+
+        // show file path
+        setFileSource(id, path_to_csv);
+
+
+        this.setupData();
+        this.updateGraphTopicList();
     }
 
     setupData(){
-        let id = this.id;
-        let xAxis = this.xAxis;
-
         let topicList = [];
         for (let i = 0; i < this.topics.length; i++){
                 topicList.push(this.topics[i].name);
         }
         let graph = this;
-        let topics = this.topics;
+
         d3.csv(this.path_to_csv, function(data){
-            let parsedData = parseData(data, topicList);
+            let parsedData = parseData(data, graph.selectors);
             graph.setData(parsedData);
             let maxValue = getMaxVal(parsedData, 2, topicList);
-            graph.setupChart(parsedData, topics, "#o-chart-" + id, maxValue, xAxis);
+            let minValue = getMinVal(parsedData, 2, topicList);
+
+            graph.possibleSelectors = getUniqueSelectors(data, ["Energiedragers"]);
+            graph.updateGraphSelectorList();
+
+            // setup chart
+            graph.setupChart(
+                parsedData,
+                graph.topics,
+                "#o-chart-" + graph.id,
+                minValue,
+                maxValue,
+                graph.xAxis);
             graph.showAllSelectedTopics();
-            showTable("#o-data-table-1", parsedData);
+            // showTable("#o-data-table-1", parsedData);
         });
-    }
-
-    getId() {
-        return this.id;
-    }
-
-    getPathToCSV(){
-        return this.path_to_csv;
-    }
-
-    getSelectedTopics(){
-        return this.selectedTopics;
     }
 
     setData(data){
@@ -65,15 +88,30 @@ class Graph {
         this.xAxis = xAxis;
     }
 
+    selectorCallback(selectorValue){
+        let arr = [this.possibleSelectors[selectorValue]];
+        this.selectors = arr;
+        this.redrawGraph();
+    }
+
+    redrawGraph(){
+        if (this.svg != null){
+            this.svg.selectAll("*").remove();
+        }
+        this.title = this.getNewTitle();
+        this.setupData();
+    }
+
     /**
      * Draws a chart for this Graph
+     * @param title
      * @param data
      * @param topics
      * @param selector
      * @param maxValue
      * @param xAxis
      */
-    setupChart(data, topics, selector, maxValue, xAxis) {
+    setupChart(data, topics, selector, minValue, maxValue, xAxis) {
         // Get the dimensions of the SVG
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
@@ -85,6 +123,8 @@ class Graph {
             .attr("width", width)
             .attr("height", height);
 
+        console.log(data);
+
         this.svg.append("text")
             .attr("x", (svgWidth/ 2))
             .attr("y", (margin.top / 2))
@@ -92,7 +132,7 @@ class Graph {
             .attr("fill", "#000")
             .style("font-size", "16px")
             .style("text-decoration", "underline")
-            .text("Dutch national energy statistics");
+            .text(this.title);
 
         this.g = this.svg.append("g")
             .attr("transform",
@@ -101,7 +141,7 @@ class Graph {
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
-            .domain([0, maxValue])
+            .domain([minValue, maxValue])
             .range([height, 0]);
 
 
@@ -137,6 +177,41 @@ class Graph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
+
+        this.svg.append("rect")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("class", "overlay")
+            .attr("width", width)
+            .attr("height", height)
+            // when the mouse enters the canvas, show the line
+            .on("mouseover", function() {
+                d3.select(".mouse-line")
+                    .style("opacity", "1");
+            })
+            // remove the line when leaving canvas
+            .on("mouseout", function() {
+                d3.select(".mouse-line")
+                    .style("opacity", "0");
+
+            })
+            .on("mousemove", function() {
+                let mouse = d3.mouse(this);
+                d3.select(".mouse-line")
+                    .attr("d", function() {
+                        let d = "M" + mouse[0] + "," + height;
+                        d += " " + mouse[0] + "," + 0;
+                        return d;
+                    });
+
+                // console.log(x.invert(d3.mouse(this)[0]))
+            });
+
+        this.g.append("path") // this is the black vertical line to follow mouse
+            .attr("class", "mouse-line")
+            .style("stroke", "black")
+            .style("stroke-width", "1px")
+            .style("opacity", "0");
+
     }
 
     showAllSelectedTopics(){
@@ -170,6 +245,10 @@ class Graph {
         updateTopicList(this.id, this.topics, this.xAxis);
     }
 
+    updateGraphSelectorList(){
+        updateSelectorList(this.id, this.possibleSelectors)
+    }
+
     topicCallback(topicId){
         let topic = this.topics[topicId];
         let selected = topic.selected;
@@ -179,8 +258,22 @@ class Graph {
             this.showLine(topicId);
         }
         this.topics[topicId].switchSelected();
+        console.log(graphs);
     }
 
+    getNewTitle() {
+        let title = "";
+        if (this.selectors.length > 0){
+            for (let i = 0; i < this.selectors.length; i++){
+                title += this.selectors[i];
+            }
+        } else {
+            title += "graph";
+            title += this.id;
+        }
+
+        return title;
+    }
 
 }
 
@@ -219,24 +312,41 @@ class Topic {
 
 // Add the first graph
 
-let topics = [];
-let titles = ["Perioden","Aanbod","Winning","Invoer","Uitvoer","Invoersaldo","Bunkering"];
+let titles = ["Perioden",
+    // "Totaal aanbod",
+    "Winning",
+    "Invoer",
+    "Uitvoer",
+    "Invoersaldo",
+    "Bunkering",
+    // "Energieaanbod/Voorraadmutatie (PJ)","Statistische verschillen (PJ)",
+    "Totaal energieverbruik",
+    // "Energieomzetting/Inzet energie voor omzetting/Totaal inzet (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet andere omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Totaal productie (PJ)","Energieomzetting/Productie energie uit omzetting/Productie elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Productie andere omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Totaal saldo energieomzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo andere omzetting (PJ)","Eigen verbruik energiesector/Totaal (PJ)","Eigen verbruik energiesector/Olie- en gaswinning (PJ)","Eigen verbruik energiesector/Cokesfabrieken (PJ)","Eigen verbruik energiesector/Raffinaderijen (PJ)","Eigen verbruik energiesector/Totaal energiebedrijven (PJ)","Verliezen bij distributie (PJ)","Finaal verbruik/Totaal finaal verbruik (PJ)","Finaal verbruik/Finaal energieverbruik/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/IJzer- en staalindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Chemie en farmaceutische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Non-ferrometalenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwmaterialenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Transportmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Metaalproducten en machine-industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Delfstoffenwinning (geen olie en gas) (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Voedings- en genotmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Papier- en grafische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Houtindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwnijverheid (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Textiel-, kleding- en lederindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse luchtvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Wegverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Railverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Pijpleidingen (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse scheepvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Diensten, afval, water en reparatie (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Woningen (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Landbouw (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Visserij (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Onbekend (PJ)","Finaal verbruik/Niet-energetisch gebruik/Totaal (PJ)","Finaal verbruik/Niet-energetisch gebruik/Nijverheid (exclusief de energiesector) (PJ)","Finaal verbruik/Niet-energetisch gebruik/Waarvan chemie en petrochemie (PJ)","Finaal verbruik/Niet-energetisch gebruik/Vervoer (PJ)","Finaal verbruik/Niet-energetisch gebruik/Overige afnemers (PJ)"
+];
 
 
-for (let i = 0; i < titles.length; i++){
-    topics.push(new Topic(titles[i], false, getRandomColor(i)));
+function addGraph(){
+    let topics = [];
+
+    for (let i = 0; i < titles.length; i++){
+        topics.push(new Topic(titles[i], i <= 1, getRandomColor(i)));
+    }
+
+    let bar = $("#graphAdder");
+
+    bar.before(getChartString(GRAPHCOUNT));
+
+    graphs.push(new Graph(
+        null,
+        "Totaal energiedragers",
+        "data/Energiebalans__aanbod__verbruik_29012019_213919.csv",
+        // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
+        ["Totaal energiedragers"],
+        topics,
+        1
+    ));
+
+    addConsoleMessage("Succesfully set-up graph!");
 }
 
-let totalGraph = new Graph(
-    0,
-    "data/Energiebalans__aanbod__verbruik_25012019_214558.csv",
-    topics,
-    1
-);
-
-totalGraph.setupData();
-totalGraph.updateGraphTopicList();
-
-graphs.push(totalGraph);
-
-addConsoleMessage("Succesfully set-up graph!");
+addGraph();

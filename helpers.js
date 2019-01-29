@@ -10,37 +10,66 @@ function getTopics(data){
 /**
  *
  * @param data
- * @param keys
+ * @param rowSelectors
  * @returns {Array}
  */
-function parseData(data, keys){
+function parseData(data, rowSelectors){
     let arr = [];
 
     for (let i = 0; i < data.length; i++){
-        arr.push(getValues(data[i], keys));
+        let newEntry = getValues(data[i], rowSelectors);
+        if (newEntry != null){
+            arr.push(newEntry);
+        }
     }
-
+    console.log(arr);
     return arr;
 }
 
 /**
  *
  * @param row
- * @param keys
+ * @param rowSelectors
  */
-function getValues(row, keys){
-    let entry = {};
-    for (let i = 0; i < keys.length; i ++){
-        let value = row[keys[i]];
-        if (keys[i] == "Perioden"){
-        // if (false){
-            value = new Date(value);
-        } else {
-            value = Math.round(row[keys[i]]);
+function getValues(row, rowSelectors){
+
+    // if row contains any value in rowSelector[]
+    for (let i = 0; i < rowSelectors.length; i++){
+        for (let entry in row){
+            if (row[entry] === rowSelectors[i]){
+                // return array
+                let arr = {};
+
+                for (let key in row){
+                    let value = row[key];
+                    // if date
+                    if (key === "Perioden"){
+                        value = new Date(value);
+                    } else {
+                        if (!isNaN(value)){
+                            // if it is a number
+                            value = Math.round(row[key]);
+                        } else if (value === "       ."){
+                            value = 0;
+                        } else if (typeof value === 'string' || value instanceof String){
+                            // if it is a string
+                        } else if (isNaN(value)){
+                            value = 0;
+                        } else {
+                            value = null;
+                        }
+                    }
+
+                    if (value != null){
+                        arr[key];
+                    }
+                    arr[key] = value;
+                }
+                return arr;
+            }
         }
-        entry[keys[i]] = value;
     }
-    return entry;
+    return null;
 }
 
 /**
@@ -69,7 +98,7 @@ function abstractUnusedTopics(topics, topicsToRemove){
  * @returns {number}
  */
 function getMaxVal(data, layers, topics) {
-    let max = 0;
+    let max = Number.MIN_SAFE_INTEGER;
 
     if (layers > 1) {
         for (let i = 0; i < data.length; i++) {
@@ -98,12 +127,66 @@ function getMaxVal(data, layers, topics) {
 
 /**
  *
+ * @param data
+ * @param layers
+ * @param topics
+ * @returns {number}
+ */
+function getMinVal(data, layers, topics) {
+    let min = Number.MAX_SAFE_INTEGER;
+
+    if (layers > 1) {
+        for (let i = 0; i < data.length; i++) {
+            let newLayer = layers - 1;
+            let newMin = getMinVal(data[i], newLayer, topics);
+            if (newMin < min) {
+                min = newMin;
+            }
+        }
+    } else {
+        for (let i = 0; i < topics.length; i++){
+            let value = data[topics[i]];
+            if (!isNaN(value)){
+                if (topics[i] != "Perioden"){
+                    if (value < min){
+                        min = value;
+                    }
+                }
+            }
+        }
+    }
+
+    return min;
+}
+
+
+/**
+ *
+ * @param data
+ * @param selectorKeys
+ * @returns {Array}
+ */
+function getUniqueSelectors(data, selectorKeys){
+    let arr = [];
+
+    for (let i = 0; i < data.length; i++){
+        for (let j = 0; j < selectorKeys.length; j++){
+            if (!arr.includes(data[i][selectorKeys[j]])){
+                arr.push(data[i][selectorKeys[j]]);
+            }
+        }
+    }
+    return arr;
+}
+
+
+/**
+ *
  * @param graphId
  * @param topicId
  */
 function updateTopics(graphId, topicId){
-    let selectedTopics = graphs[graphId].topicCallback(topicId);
-
+    graphs[graphId].topicCallback(topicId);
 }
 
 /**
@@ -123,6 +206,13 @@ function updateTopicList(graphId, topics, xAxis){
 
     }
 }
+
+function updateSelectorList(graphId, selectors){
+    for (let i = 0; i < selectors.length; i++){
+        $("#selectorList-" + graphId).append("<option value=" + i + ">" + selectors[i] + "</option>");
+    }
+}
+
 
 // says hi :)
 function sayHi(){
@@ -227,4 +317,13 @@ function getRandomColor(i){
         '#FF3380', '#83cc11', '#66E64D', '#4D80CC', '#9900B3',
         '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
     return colorArray[i%colorArray.length];
+}
+
+function setFileSource(id, path_to_csv){
+    $("#o-filename-" + id).html(path_to_csv);
+}
+
+function selectorChanged(id, selector){
+    graphs[id].selectorCallback(selector.options[selector.selectedIndex].value);
+
 }

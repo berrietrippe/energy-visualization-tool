@@ -133,3 +133,8 @@ body, html {
   margin-left:8px;
   display: inline-block;
 }
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
