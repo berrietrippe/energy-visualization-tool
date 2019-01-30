@@ -310,6 +310,10 @@ class Topic {
     setArea(area){
         this.area = area;
     }
+
+    setAreaPath(areaPath){
+        this.areaPath = areaPath;
+    }
 }
 
 function addLineGraph(){

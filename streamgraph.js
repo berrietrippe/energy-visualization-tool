@@ -40,6 +40,7 @@ class StreamGraph {
 
         let graph = this;
         this.parsedData = this.data[this.selectors[0]];
+        this.parsedData = normalizeData(this.parsedData, this.topics);
 
         let maxValue = getMaxVal(this.parsedData, 2, topicList);
         let minValue = getMinVal(this.parsedData, 2, topicList);
@@ -98,6 +99,7 @@ class StreamGraph {
      * @param xAxis
      */
     setupGraph(data, topics, selector, minValue, maxValue, xAxis) {
+        console.log(data);
         // Get the dimensions of the SVG
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
@@ -127,9 +129,8 @@ class StreamGraph {
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
-            .domain([minValue, maxValue])
+            .domain([0, 100])
             .range([height, 0]);
-
 
         for (let i = xAxis; i < topics.length; i++){
             // y.domain(d3.extent(data, function(d) { return d.value }));
@@ -138,7 +139,7 @@ class StreamGraph {
                     return x(d.Perioden);
                 })
                 .y(function(d) {
-                    return y(d[topics[i].name])
+                    return y(d[topics[i].name]);
                 })
                 .curve(d3.curveMonotoneX);
 
@@ -149,7 +150,7 @@ class StreamGraph {
                 .x(function(d) { return x(d.Perioden); })
                 .y0(height)
                 .y1(function(d) {
-                    return y(d[topics[i].name])
+                    return y(d[topics[i].name]);
                 });
 
             topics[i].setArea(area);
@@ -177,7 +178,7 @@ class StreamGraph {
     }
 
     showAllSelectedTopics(){
-        for (let i = this.xAxis; i < this.topics.length; i++) {
+        for (let i = this.topics.length-1; i > this.xAxis; i = i - 1) {
             if (this.topics[i].isSelected()){
                 this.showLine(i);
             }
@@ -196,17 +197,19 @@ class StreamGraph {
             .attr("d", topic.line)); // apply smoothing to the line);
 
         // add the area
-        this.g.append("path")
+        topic.setAreaPath(this.g.append("path")
             .data([this.parsedData])
             .attr("class", "area")
             .attr("fill", topic.color)
-            .attr("d", topic.area);
+            .attr("d", topic.area)
+        );
         addConsoleMessage("Line for '" + topic.name + "' category added <div class='c-bullet' style='background-color:" + topic.color + ";'></div>");
     }
 
     removeLine(topicId){
         let topic = this.topics[topicId];
         topic.path.remove();
+        topic.areaPath.remove();
         addConsoleMessage("Line for '" + topic.name + "' category removed");
     }
 
@@ -263,7 +266,7 @@ function addStreamGraph(){
     ];
 
     for (let i = 0; i < titles.length; i++){
-        topics.push(new Topic(titles[i], i <= 3, getRandomColor(i)));
+        topics.push(new Topic(titles[i], true, getRandomColor(i)));
     }
 
     let bar = $("#graphAdder");

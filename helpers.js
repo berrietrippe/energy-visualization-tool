@@ -98,6 +98,19 @@ function parseStreamData(data){
         "Bunkering",
     ];
 
+    let titles = [
+        "Totaal kool en koolproducten",
+        "Totaal aardoliegrondstoffen en producten",
+        "Aardgas",
+        "Hernieuwbare energie",
+        "Windernergie op zee",
+        "Omgevingsenergie",
+        "Totaal biomassa",
+        "Elektriciteit",
+        "Warmte",
+        "Totaal overige energiedragers"
+    ];
+
     // get a list of all unique selectors
     let uniqueYears = getUniqueSelectors(data, ["Perioden"]);
 
@@ -124,9 +137,19 @@ function parseStreamData(data){
         data[selectors[i]] = [];
         for (let year in container[selectors[i]]){
             let entry = {};
+            let max = 0;
+
             for (key in container[selectors[i]][year]){
                 entry[key] = purifyValue(container[selectors[i]][year][key]);
+                for (let k = 0; k < titles.length; k++){
+                    if (key === titles[k]){
+                        max = max + entry[key];
+                    }
+                }
             }
+
+            entry["MAX"] = max;
+
             entry["Perioden"] = new Date(year);
             data[selectors[i]].push(entry);
         }
@@ -134,6 +157,25 @@ function parseStreamData(data){
 
     streamData = data;
 
+}
+
+function normalizeData(data, topics){
+    console.log(topics);
+    for (let i = 0; i < data.length; i++){
+        let max = data[i]["MAX"];
+        let stack = 0;
+        for (key in data[i]){
+            for (let j = 0; j < topics.length; j++){
+                if (key === topics[j].name){
+                    stack += (data[i][key] /max * 100);
+                    data[i][key] = stack;
+                }
+            }
+        }
+    }
+
+    console.log(data);
+    return data;
 }
 
 
