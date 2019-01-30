@@ -1,8 +1,8 @@
 
 /**
- * LineGraph class used to represent a graph in our application
+ * StreamGraph class used to represent a graph in our application
  */
-class LineGraph {
+class StreamGraph {
     constructor(id, title, data, selectors, topics, xAxisId){
 
         // auto increment iets
@@ -13,7 +13,7 @@ class LineGraph {
 
         // set variables
         this.id = id;
-        this.selectors = selectors;
+        this.selectors = [selectors[0]];
         this.topics = topics;
         this.xAxis = xAxisId;
         this.possibleSelectors = selectors;
@@ -29,7 +29,6 @@ class LineGraph {
 
         this.setupData();
         this.updateGraphTopicList();
-        this.possibleSelectors = getUniqueSelectors(this.data, ["Energiedragers"]);
         this.updateGraphSelectorList();
     }
 
@@ -38,12 +37,14 @@ class LineGraph {
         for (let i = 0; i < this.topics.length; i++){
             topicList.push(this.topics[i].name);
         }
-        let graph = this;
 
-        this.parsedData = parseData(this.data, graph.selectors);
+        let graph = this;
+        this.parsedData = this.data[this.selectors[0]];
+
         let maxValue = getMaxVal(this.parsedData, 2, topicList);
         let minValue = getMinVal(this.parsedData, 2, topicList);
 
+        // graph.possibleSelectors = getUniqueSelectors(data, ["Energiedragers"]);
 
         // setup chart
         graph.setupGraph(
@@ -55,10 +56,6 @@ class LineGraph {
             graph.xAxis);
         graph.showAllSelectedTopics();
         // showTable("#o-data-table-1", parsedData);
-    }
-
-    setData(data){
-        this.data = data;
     }
 
     setPathToCSV(path_to_csv){
@@ -92,7 +89,7 @@ class LineGraph {
     }
 
     /**
-     * Draws a graph for this LineGraph
+     * Draws a graph for this StreamGraph
      * @param title
      * @param data
      * @param topics
@@ -130,23 +127,23 @@ class LineGraph {
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
-            .domain([minValue, maxValue])
+            .domain([0, maxValue])
             .range([height, 0]);
 
-
-        for (let i = xAxis; i < topics.length; i++){
-            // y.domain(d3.extent(data, function(d) { return d.value }));
-            let line = d3.line()
-                .x(function(d) {
-                    return x(d.Perioden);
-                })
-                .y(function(d) {
-                    return y(d[topics[i].name])
-                })
-                .curve(d3.curveMonotoneX);
-
-            topics[i].setLine(line);
-        }
+        //
+        // for (let i = xAxis; i < topics.length; i++){
+        //     // y.domain(d3.extent(data, function(d) { return d.value }));
+        //     let line = d3.line()
+        //         .x(function(d) {
+        //             return x(d.Perioden);
+        //         })
+        //         .y(function(d) {
+        //             return y(d[topics[i].name])
+        //         })
+        //         .curve(d3.curveMonotoneX);
+        //
+        //     topics[i].setLine(line);
+        // }
 
         x.domain(d3.extent(data, function(d) {
             return d.Perioden}));
@@ -155,6 +152,30 @@ class LineGraph {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain");
+
+        // color palette
+        var color = d3.scaleOrdinal()
+            .domain(topics)
+            .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+
+        //stack the data?
+        var stackedData = d3.stack()
+            .offset(d3.stackOffsetSilhouette)
+            .keys(topics)
+            (this.parsedData)
+
+        // Show the areas
+        this.svg
+            .selectAll("mylayers")
+            .data(stackedData)
+            .enter()
+            .append("path")
+            .style("fill", function(d) { return color(d.key); })
+            .attr("d", d3.area()
+                .x(function(d, i) {return x(d.data.year); })
+                .y0(function(d) { return y(d[0]); })
+                .y1(function(d) { return y(d[1]); })
+            )
         // .remove();
 
         this.g.append("g")
@@ -266,73 +287,49 @@ class LineGraph {
 
 }
 
-/**
- * Topic class
- */
-class Topic {
-    constructor(name, selected, color){
-        this.name = name;
-        this.selected = selected;
-        this.color = color;
-    }
-
-    isSelected(){
-        return this.selected;
-    }
-
-    setSelected(state){
-        this.selected = state;
-    }
-
-    switchSelected(){
-        let state = this.selected;
-        state = !state;
-        this.setSelected(state);
-    }
-
-    setLine(line){
-        this.line = line;
-    }
-
-    setPath(path){
-        this.path = path;
-    }
-}
-
-function addLineGraph(){
+function addStreamGraph(){
     let topics = [];
 
-    let titles = ["Perioden",
-        // "Totaal aanbod",
+    let titles = [
+        "Totaal kool en koolproducten",
+        "Totaal aardoliegrondstoffen en producten",
+        "Aardgas",
+        "Hernieuwbare energie",
+        "Windernergie op zee",
+        "Omgevingsenergie",
+        "Totaal biomassa",
+        "Elektriciteit",
+        "Warmte",
+        "Totaal overige energiedragers"
+    ];
+
+    for (let i = 0; i < titles.length; i++){
+        topics.push(new Topic(titles[i], i <= 3, getRandomColor(i)));
+    }
+
+    let bar = $("#graphAdder");
+
+    bar.before(getStreamGraphString(GRAPHCOUNT));
+
+    let selectors = [
+        "Totaal energieverbruik",
         "Winning",
         "Invoer",
         "Uitvoer",
         "Invoersaldo",
         "Bunkering",
-        // "Energieaanbod/Voorraadmutatie (PJ)","Statistische verschillen (PJ)",
-        "Totaal energieverbruik",
-        // "Energieomzetting/Inzet energie voor omzetting/Totaal inzet (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet andere omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Totaal productie (PJ)","Energieomzetting/Productie energie uit omzetting/Productie elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Productie andere omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Totaal saldo energieomzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo andere omzetting (PJ)","Eigen verbruik energiesector/Totaal (PJ)","Eigen verbruik energiesector/Olie- en gaswinning (PJ)","Eigen verbruik energiesector/Cokesfabrieken (PJ)","Eigen verbruik energiesector/Raffinaderijen (PJ)","Eigen verbruik energiesector/Totaal energiebedrijven (PJ)","Verliezen bij distributie (PJ)","Finaal verbruik/Totaal finaal verbruik (PJ)","Finaal verbruik/Finaal energieverbruik/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/IJzer- en staalindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Chemie en farmaceutische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Non-ferrometalenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwmaterialenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Transportmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Metaalproducten en machine-industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Delfstoffenwinning (geen olie en gas) (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Voedings- en genotmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Papier- en grafische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Houtindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwnijverheid (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Textiel-, kleding- en lederindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse luchtvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Wegverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Railverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Pijpleidingen (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse scheepvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Diensten, afval, water en reparatie (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Woningen (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Landbouw (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Visserij (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Onbekend (PJ)","Finaal verbruik/Niet-energetisch gebruik/Totaal (PJ)","Finaal verbruik/Niet-energetisch gebruik/Nijverheid (exclusief de energiesector) (PJ)","Finaal verbruik/Niet-energetisch gebruik/Waarvan chemie en petrochemie (PJ)","Finaal verbruik/Niet-energetisch gebruik/Vervoer (PJ)","Finaal verbruik/Niet-energetisch gebruik/Overige afnemers (PJ)"
     ];
 
-    for (let i = 0; i < titles.length; i++){
-        topics.push(new Topic(titles[i], i <= 1, getRandomColor(i)));
-    }
-
-    let bar = $("#graphAdder");
-
-    bar.before(getLineGraphString(GRAPHCOUNT));
-
-    let graph = new LineGraph(
+    graphs.push(new StreamGraph(
         null,
-        "Totaal energiedragers",
-        lineData,
+        "Totaal energieverbruik",
+        streamData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
-        ["Totaal energiedragers"],
+        selectors,
         topics,
-        1
-    );
+        0
+    ));
 
-    graphs.push(graph);
-
-    addConsoleMessage("Succesfully set-up line-graph!");
+    addConsoleMessage("Succesfully set-up stream-graph!");
 }
+

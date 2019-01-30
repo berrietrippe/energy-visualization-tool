@@ -1,6 +1,6 @@
 
 /**
- * ExtendedLineGraph class used to represent a graph in our application
+ * StreamGraph class used to represent a graph in our application
  */
 class ExtendedLineGraph {
     constructor(id, title, data, selectors, topics, xAxisId){
@@ -29,6 +29,7 @@ class ExtendedLineGraph {
 
         this.setupData();
         this.updateGraphTopicList();
+        this.updateGraphSelectorList();
     }
 
     setupData(){
@@ -44,7 +45,6 @@ class ExtendedLineGraph {
         let minValue = getMinVal(this.parsedData, 2, topicList);
 
         // graph.possibleSelectors = getUniqueSelectors(data, ["Energiedragers"]);
-        graph.updateGraphSelectorList();
 
         // setup chart
         graph.setupGraph(
@@ -89,7 +89,7 @@ class ExtendedLineGraph {
     }
 
     /**
-     * Draws a graph for this ExtendedLineGraph
+     * Draws a graph for this StreamGraph
      * @param title
      * @param data
      * @param topics
@@ -266,7 +266,7 @@ class ExtendedLineGraph {
 function addExtendedLineGraph(){
     let topics = [];
 
-    let titles = ["Totaal energiedragers",
+    let titles = [
         "Totaal kool en koolproducten",
         "Totaal aardoliegrondstoffen en producten",
         "Aardgas",
@@ -280,7 +280,7 @@ function addExtendedLineGraph(){
     ];
 
     for (let i = 0; i < titles.length; i++){
-        topics.push(new Topic(titles[i], true, getRandomColor(i)));
+        topics.push(new Topic(titles[i], i <= 3, getRandomColor(i)));
     }
 
     let bar = $("#graphAdder");
@@ -303,7 +303,7 @@ function addExtendedLineGraph(){
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
         selectors,
         topics,
-        1
+        0
     ));
 
     addConsoleMessage("Succesfully set-up stream-graph!");

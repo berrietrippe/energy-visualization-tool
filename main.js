@@ -28,6 +28,7 @@ function setupData(){
 }
 
 function dataSetupCompleted(){
+    // addStreamGraph();
     addExtendedLineGraph();
     addLineGraph();
 }
