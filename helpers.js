@@ -178,12 +178,15 @@ function normalizeData(data){
         "Totaal overige energiedragers"
     ];
 
+    topics.reverse();
+
+    console.log(data);
     for (let selector in data){
         for (let i = 0; i < data[selector].length; i++){
-            console.log(data[selector])
             if (!data[selector][i]["Normalized"]){
                 let max = data[selector][i]["MAX"];
                 let stack = 0;
+
                 for (key in data[selector][i]){
                     for (let k = 0; k < topics.length; k++){
                         if (key === topics[k]){

@@ -105,6 +105,7 @@ class StreamGraph {
         let margin = { top: 40, right: 20, bottom: 30, left: 50 };
         let width = svgWidth - margin.left - margin.right;
         let height = svgHeight - margin.top - margin.bottom;
+        this.height = height;
         // var svgWidth = 1000, svgHeight = 600;
         this.svg = d3.select(selector)
             .attr("width", width)
@@ -175,24 +176,24 @@ class StreamGraph {
 
     }
 
-    showAllSelectedTopics(){
-        for (let i = this.topics.length-1; i > this.xAxis; i = i - 1) {
-            if (this.topics[i].isSelected()){
+    showAllSelectedTopics() {
+        for (let i = this.topics.length - 1; i > this.xAxis; i = i - 1) {
+            // for (let i = 0; i < this.topics.length; i++) {
+            if (this.topics[i].isSelected()) {
                 this.showLine(i);
             }
         }
     }
-
     showLine(topicId){
         let topic = this.topics[topicId];
-        topic.setPath(this.g.append("path")
-            .datum(this.parsedData)
-            .attr("fill", "none")
-            .attr("stroke", topic.color)
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1.5)
-            .attr("d", topic.line)); // apply smoothing to the line);
+        // topic.setPath(this.g.append("path")
+        //     .datum(this.parsedData)
+        //     .attr("fill", "none")
+        //     .attr("stroke", topic.color)
+        //     .attr("stroke-linejoin", "round")
+        //     .attr("stroke-linecap", "round")
+        //     .attr("stroke-width", 1.5)
+        //     .attr("d", topic.line)); // apply smoothing to the line);
 
         // add the area
         topic.setAreaPath(this.g.append("path")
@@ -200,13 +201,17 @@ class StreamGraph {
             .attr("class", "area")
             .attr("fill", topic.color)
             .attr("d", topic.area)
+
+            .attr("transform",
+                "translate(0," + this.height+ ") scale(1,-1)"
+            )
         );
         addConsoleMessage("Line for '" + topic.name + "' category added <div class='c-bullet' style='background-color:" + topic.color + ";'></div>");
     }
 
     removeLine(topicId){
         let topic = this.topics[topicId];
-        topic.path.remove();
+        // topic.path.remove();
         topic.areaPath.remove();
         addConsoleMessage("Line for '" + topic.name + "' category removed");
     }
