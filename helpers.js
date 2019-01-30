@@ -15,14 +15,12 @@ function getTopics(data){
  */
 function parseData(data, rowSelectors){
     let arr = [];
-
     for (let i = 0; i < data.length; i++){
         let newEntry = getValues(data[i], rowSelectors);
         if (newEntry != null){
             arr.push(newEntry);
         }
     }
-    console.log(arr);
     return arr;
 }
 
@@ -37,6 +35,8 @@ function getValues(row, rowSelectors){
     for (let i = 0; i < rowSelectors.length; i++){
         for (let entry in row){
             if (row[entry] === rowSelectors[i]){
+                // This row contains information we need
+
                 // return array
                 let arr = {};
 
@@ -46,18 +46,7 @@ function getValues(row, rowSelectors){
                     if (key === "Perioden"){
                         value = new Date(value);
                     } else {
-                        if (!isNaN(value)){
-                            // if it is a number
-                            value = Math.round(row[key]);
-                        } else if (value === "       ."){
-                            value = 0;
-                        } else if (typeof value === 'string' || value instanceof String){
-                            // if it is a string
-                        } else if (isNaN(value)){
-                            value = 0;
-                        } else {
-                            value = null;
-                        }
+                        value = purifyValue(value);
                     }
 
                     if (value != null){
@@ -71,6 +60,82 @@ function getValues(row, rowSelectors){
     }
     return null;
 }
+
+function purifyValue(value){
+    if (!isNaN(value)){
+        // if it is a number
+        value = Math.round(value);
+    } else if (value === "       ."){
+        value = 0;
+    } else if (typeof value === 'string' || value instanceof String){
+        // if it is a string
+    } else if (isNaN(value)){
+        value = 0;
+    } else {
+        value = null;
+    }
+    return value;
+}
+
+
+function parseLineData(data){
+    lineData = data;
+}
+
+/**
+ *
+ * @param data
+ */
+function parseStreamData(data){
+    let container = {};
+
+    let selectors = [
+        "Totaal energieverbruik",
+        "Winning",
+        "Invoer",
+        "Uitvoer",
+        "Invoersaldo",
+        "Bunkering",
+    ];
+
+    // get a list of all unique selectors
+    let uniqueYears = getUniqueSelectors(data, ["Perioden"]);
+
+    for (let j = 0; j < selectors.length; j++){
+        container[selectors[j]] = {};
+
+        for (let a = 0; a < uniqueYears.length; a++){
+            container[selectors[j]][uniqueYears[a]] = {}
+        }
+    }
+
+    for (let i = 0; i < data.length; i++){
+        let year = data[i]["Perioden"];
+
+        for (let j = 0; j < selectors.length; j++){
+
+            container[selectors[j]][year][data[i]["Energiedragers"]] = data[i][selectors[j]];
+        }
+    }
+
+    data = {};
+
+    for (let i = 0; i < selectors.length; i++){
+        data[selectors[i]] = [];
+        for (let year in container[selectors[i]]){
+            let entry = {};
+            for (key in container[selectors[i]][year]){
+                entry[key] = purifyValue(container[selectors[i]][year][key]);
+            }
+            entry["Perioden"] = new Date(year);
+            data[selectors[i]].push(entry);
+        }
+    }
+
+    streamData = data;
+
+}
+
 
 /**
  *
@@ -208,6 +273,7 @@ function updateTopicList(graphId, topics, xAxis){
 }
 
 function updateSelectorList(graphId, selectors){
+    // $("#selectorList-" + graphId).html(" ");
     for (let i = 0; i < selectors.length; i++){
         $("#selectorList-" + graphId).append("<option value=" + i + ">" + selectors[i] + "</option>");
     }
