@@ -268,7 +268,7 @@ function addExtendedLineGraph(){
         "Totaal aardoliegrondstoffen en producten",
         "Aardgas",
         "Hernieuwbare energie",
-        "Windernergie op zee",
+        "Totaal windenergie",
         "Omgevingsenergie",
         "Totaal biomassa",
         "Elektriciteit",
