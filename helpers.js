@@ -336,7 +336,7 @@ function updateTopicList(graphId, topics, xAxis, checkboxes = true){
             checked = "checked";
         }
 
-        let checkboxEnabled = checkboxes? "<input type='checkbox' \" + checked + \" onclick='updateTopics(\" + graphId + \",\" + i + \")'></input>" : "";
+        let checkboxEnabled = checkboxes? "<input type='checkbox' " + checked + " onclick='updateTopics(" + graphId + "," + i + ")'></input>" : "";
         $("#topicList-" + graphId).append("<li>" + checkboxEnabled + topics[i].name + "<div class='c-bullet' style='background-color: " + topics[i].color + ";'> </div></li>");
 
     }
