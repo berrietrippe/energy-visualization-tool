@@ -177,7 +177,7 @@ class StreamGraph {
     }
 
     showAllSelectedTopics() {
-        for (let i = this.topics.length - 1; i > this.xAxis; i = i - 1) {
+        for (let i = this.topics.length - 1; i >= this.xAxis; i = i - 1) {
             // for (let i = 0; i < this.topics.length; i++) {
             if (this.topics[i].isSelected()) {
                 this.showLine(i);
