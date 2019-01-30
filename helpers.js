@@ -86,7 +86,7 @@ function parseLineData(data){
  *
  * @param data
  */
-function parseStreamData(data){
+function parseExtendedData(data){
     let container = {};
 
     let selectors = [
@@ -131,10 +131,10 @@ function parseStreamData(data){
         }
     }
 
-    data = {};
+    let newData = {};
 
     for (let i = 0; i < selectors.length; i++){
-        data[selectors[i]] = [];
+        newData[selectors[i]] = [];
         for (let year in container[selectors[i]]){
             let entry = {};
             let max = 0;
@@ -151,30 +151,53 @@ function parseStreamData(data){
             entry["MAX"] = max;
 
             entry["Perioden"] = new Date(year);
-            data[selectors[i]].push(entry);
+            newData[selectors[i]].push(entry);
         }
     }
 
-    streamData = data;
-
+    return newData;
 }
 
-function normalizeData(data, topics){
-    console.log(topics);
-    for (let i = 0; i < data.length; i++){
-        let max = data[i]["MAX"];
-        let stack = 0;
-        for (key in data[i]){
-            for (let j = 0; j < topics.length; j++){
-                if (key === topics[j].name){
-                    stack += (data[i][key] /max * 100);
-                    data[i][key] = stack;
+function parseStreamData(data){
+    let newData = parseExtendedData(data);
+    return normalizeData(newData);
+}
+
+function normalizeData(data){
+
+    let topics = [
+        "Totaal kool en koolproducten",
+        "Totaal aardoliegrondstoffen en producten",
+        "Aardgas",
+        "Hernieuwbare energie",
+        "Windernergie op zee",
+        "Omgevingsenergie",
+        "Totaal biomassa",
+        "Elektriciteit",
+        "Warmte",
+        "Totaal overige energiedragers"
+    ];
+
+    for (let selector in data){
+        for (let i = 0; i < data[selector].length; i++){
+            console.log(data[selector])
+            if (!data[selector][i]["Normalized"]){
+                let max = data[selector][i]["MAX"];
+                let stack = 0;
+                for (key in data[selector][i]){
+                    for (let k = 0; k < topics.length; k++){
+                        if (key === topics[k]){
+                            stack += (data[selector][i][key] /max * 100);
+                            data[selector][i][key] = stack;
+                        }
+                    }
                 }
+                data[selector][i]["Normalized"] = true;
             }
         }
     }
 
-    console.log(data);
+
     return data;
 }
 

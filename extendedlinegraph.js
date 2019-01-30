@@ -39,7 +39,7 @@ class ExtendedLineGraph {
         }
 
         let graph = this;
-        this.parsedData = this.data[this.selectors[0]];
+        this.parsedData = this.data[this.selectors[0]].slice();
 
         let maxValue = getMaxVal(this.parsedData, 2, topicList);
         let minValue = getMinVal(this.parsedData, 2, topicList);
@@ -108,8 +108,6 @@ class ExtendedLineGraph {
         this.svg = d3.select(selector)
             .attr("width", width)
             .attr("height", height);
-
-        console.log(data);
 
         this.svg.append("text")
             .attr("x", (svgWidth/ 2))
@@ -244,7 +242,6 @@ class ExtendedLineGraph {
             this.showLine(topicId);
         }
         this.topics[topicId].switchSelected();
-        console.log(graphs);
     }
 
     getNewTitle() {
@@ -299,7 +296,7 @@ function addExtendedLineGraph(){
     graphs.push(new ExtendedLineGraph(
         null,
         "Totaal energieverbruik",
-        streamData,
+        extendedData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
         selectors,
         topics,

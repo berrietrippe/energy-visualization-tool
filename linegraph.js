@@ -121,8 +121,6 @@ class LineGraph {
             .attr("width", width)
             .attr("height", height);
 
-        console.log(data);
-
         this.svg.append("text")
             .attr("x", (svgWidth/ 2))
             .attr("y", (margin.top / 2))
@@ -256,7 +254,6 @@ class LineGraph {
             this.showLine(topicId);
         }
         this.topics[topicId].switchSelected();
-        console.log(graphs);
     }
 
     getNewTitle() {

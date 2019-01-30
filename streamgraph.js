@@ -25,7 +25,8 @@ class StreamGraph {
 
         this.title = title;
         this.data = data;
-        this.parsedData = null;
+        console.log(this.data);
+        this.parsedData = this.data[this.selectors[0]];
 
         this.setupData();
         this.updateGraphTopicList();
@@ -34,13 +35,12 @@ class StreamGraph {
 
     setupData(){
         let topicList = [];
-        for (let i = 0; i < this.topics.length; i++){
+        for (let i = 0; i < this.topics.length; i++) {
             topicList.push(this.topics[i].name);
         }
 
         let graph = this;
         this.parsedData = this.data[this.selectors[0]];
-        this.parsedData = normalizeData(this.parsedData, this.topics);
 
         let maxValue = getMaxVal(this.parsedData, 2, topicList);
         let minValue = getMinVal(this.parsedData, 2, topicList);
@@ -99,7 +99,6 @@ class StreamGraph {
      * @param xAxis
      */
     setupGraph(data, topics, selector, minValue, maxValue, xAxis) {
-        console.log(data);
         // Get the dimensions of the SVG
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
@@ -111,7 +110,6 @@ class StreamGraph {
             .attr("width", width)
             .attr("height", height);
 
-        console.log(data);
 
         this.svg.append("text")
             .attr("x", (svgWidth/ 2))
@@ -129,7 +127,7 @@ class StreamGraph {
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
-            .domain([0, 100])
+            .domain([0, maxValue])
             .range([height, 0]);
 
         for (let i = xAxis; i < topics.length; i++){
@@ -230,7 +228,6 @@ class StreamGraph {
             this.showLine(topicId);
         }
         this.topics[topicId].switchSelected();
-        console.log(graphs);
     }
 
     getNewTitle() {
