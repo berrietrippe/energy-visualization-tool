@@ -217,7 +217,7 @@ class StreamGraph {
     }
 
     updateGraphTopicList(){
-        updateTopicList(this.id, this.topics, this.xAxis);
+        updateTopicList(this.id, this.topics, this.xAxis, false);
     }
 
     updateGraphSelectorList(){

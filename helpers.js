@@ -327,15 +327,17 @@ function updateTopics(graphId, topicId){
  * @param graphId
  * @param topics
  * @param xAxis
+ * @param checkboxes
  */
-function updateTopicList(graphId, topics, xAxis){
+function updateTopicList(graphId, topics, xAxis, checkboxes = true){
     for (let i = xAxis; i < topics.length; i++){
         let checked = "";
         if (topics[i].isSelected()){
             checked = "checked";
         }
 
-        $("#topicList-" + graphId).append("<li><input type='checkbox' " + checked + " onclick='updateTopics(" + graphId + "," + i + ")'></input>" + topics[i].name + "<div class='c-bullet' style='background-color: " + topics[i].color + ";'> </div></li>");
+        let checkboxEnabled = checkboxes? "<input type='checkbox' \" + checked + \" onclick='updateTopics(\" + graphId + \",\" + i + \")'></input>" : "";
+        $("#topicList-" + graphId).append("<li>" + checkboxEnabled + topics[i].name + "<div class='c-bullet' style='background-color: " + topics[i].color + ";'> </div></li>");
 
     }
 }
