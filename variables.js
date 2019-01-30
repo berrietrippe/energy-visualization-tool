@@ -35,9 +35,9 @@ function getLineGraphString(id){
         '                        <svg id="o-chart-' + id + '" class="line-chart w-100 h-100"></svg>'+
         '                    </div>'+
         '                    <div class="col-3 h-100 p-3">'+
-        '                        <div class="o-visualization">'+
-        '                            <div>Content can be displayed here</div>'+
-        '                        </div>'+
+        // '                        <div class="o-visualization">'+
+        // '                            <div>Content can be displayed here</div>'+
+        // '                        </div>'+
         '                    </div>'+
         '                </div>'+
         '            </div>'+
@@ -80,11 +80,11 @@ function getExtendedLineGraphString(id){
         '                        <!--</div>-->'+
         '                        <svg id="o-chart-' + id + '" class="line-chart w-100 h-100"></svg>'+
         '                    </div>'+
-        '                    <div class="col-3 h-100 p-3">'+
-        '                        <div class="o-visualization">'+
-        '                            <div>Content can be displayed here</div>'+
-        '                        </div>'+
-        '                    </div>'+
+        // '                    <div class="col-3 h-100 p-3">'+
+        // '                        <div class="o-visualization">'+
+        // '                            <div>Content can be displayed here</div>'+
+        // '                        </div>'+
+        // '                    </div>'+
         '                </div>'+
         '            </div>'+
         '        </div>'+

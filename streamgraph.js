@@ -240,6 +240,7 @@ class StreamGraph {
         if (this.selectors.length > 0){
             for (let i = 0; i < this.selectors.length; i++){
                 title += this.selectors[i];
+                title += ", normalized";
             }
         } else {
             title += "graph";
@@ -286,7 +287,7 @@ function addStreamGraph(){
 
     graphs.push(new StreamGraph(
         null,
-        "Totaal energieverbruik",
+        "Totaal energieverbruik, normalized",
         streamData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
         selectors,

@@ -261,6 +261,7 @@ class LineGraph {
         if (this.selectors.length > 0){
             for (let i = 0; i < this.selectors.length; i++){
                 title += this.selectors[i];
+                title += " (PJ)";
             }
         } else {
             title += "graph";
@@ -338,7 +339,7 @@ function addLineGraph(){
 
     let graph = new LineGraph(
         null,
-        "Totaal energiedragers",
+        "Totaal energiedragers (PJ)",
         lineData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
         null,
