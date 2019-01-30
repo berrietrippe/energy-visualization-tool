@@ -11,9 +11,19 @@ class LineGraph {
             GRAPHCOUNT++;
         }
 
+        this.data = data;
+
         // set variables
         this.id = id;
-        this.selectors = selectors;
+        if (selectors == null){
+            this.possibleSelectors = getUniqueSelectors(this.data, ["Energiedragers"]);
+            selectors = this.possibleSelectors;
+        } else {
+            this.possibleSelectors = selectors;
+        }
+
+        this.selectors = [this.possibleSelectors[0]];
+
         this.topics = topics;
         this.xAxis = xAxisId;
         this.possibleSelectors = selectors;
@@ -24,12 +34,10 @@ class LineGraph {
         }
 
         this.title = title;
-        this.data = data;
         this.parsedData = null;
 
         this.setupData();
         this.updateGraphTopicList();
-        this.possibleSelectors = getUniqueSelectors(this.data, ["Energiedragers"]);
         this.updateGraphSelectorList();
     }
 
@@ -41,6 +49,7 @@ class LineGraph {
         let graph = this;
 
         this.parsedData = parseData(this.data, graph.selectors);
+
         let maxValue = getMaxVal(this.parsedData, 2, topicList);
         let minValue = getMinVal(this.parsedData, 2, topicList);
 
@@ -166,40 +175,40 @@ class LineGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
-
-        this.svg.append("rect")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .attr("class", "overlay")
-            .attr("width", width)
-            .attr("height", height)
-            // when the mouse enters the canvas, show the line
-            .on("mouseover", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "1");
-            })
-            // remove the line when leaving canvas
-            .on("mouseout", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "0");
-
-            })
-            .on("mousemove", function() {
-                let mouse = d3.mouse(this);
-                d3.select(".mouse-line")
-                    .attr("d", function() {
-                        let d = "M" + mouse[0] + "," + height;
-                        d += " " + mouse[0] + "," + 0;
-                        return d;
-                    });
-
-                // console.log(x.invert(d3.mouse(this)[0]))
-            });
-
-        this.g.append("path") // this is the black vertical line to follow mouse
-            .attr("class", "mouse-line")
-            .style("stroke", "black")
-            .style("stroke-width", "1px")
-            .style("opacity", "0");
+        //
+        // this.svg.append("rect")
+        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        //     .attr("class", "overlay")
+        //     .attr("width", width)
+        //     .attr("height", height)
+        //     // when the mouse enters the canvas, show the line
+        //     .on("mouseover", function() {
+        //         d3.select(".mouse-line")
+        //             .style("opacity", "1");
+        //     })
+        //     // remove the line when leaving canvas
+        //     .on("mouseout", function() {
+        //         d3.select(".mouse-line")
+        //             .style("opacity", "0");
+        //
+        //     })
+        //     .on("mousemove", function() {
+        //         let mouse = d3.mouse(this);
+        //         d3.select(".mouse-line")
+        //             .attr("d", function() {
+        //                 let d = "M" + mouse[0] + "," + height;
+        //                 d += " " + mouse[0] + "," + 0;
+        //                 return d;
+        //             });
+        //
+        //         // console.log(x.invert(d3.mouse(this)[0]))
+        //     });
+        //
+        // this.g.append("path") // this is the black vertical line to follow mouse
+        //     .attr("class", "mouse-line")
+        //     .style("stroke", "black")
+        //     .style("stroke-width", "1px")
+        //     .style("opacity", "0");
 
     }
 
@@ -297,6 +306,10 @@ class Topic {
     setPath(path){
         this.path = path;
     }
+
+    setArea(area){
+        this.area = area;
+    }
 }
 
 function addLineGraph(){
@@ -327,7 +340,7 @@ function addLineGraph(){
         "Totaal energiedragers",
         lineData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
-        ["Totaal energiedragers"],
+        null,
         topics,
         1
     );

@@ -127,23 +127,33 @@ class StreamGraph {
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
-            .domain([0, maxValue])
+            .domain([minValue, maxValue])
             .range([height, 0]);
 
-        //
-        // for (let i = xAxis; i < topics.length; i++){
-        //     // y.domain(d3.extent(data, function(d) { return d.value }));
-        //     let line = d3.line()
-        //         .x(function(d) {
-        //             return x(d.Perioden);
-        //         })
-        //         .y(function(d) {
-        //             return y(d[topics[i].name])
-        //         })
-        //         .curve(d3.curveMonotoneX);
-        //
-        //     topics[i].setLine(line);
-        // }
+
+        for (let i = xAxis; i < topics.length; i++){
+            // y.domain(d3.extent(data, function(d) { return d.value }));
+            let line = d3.line()
+                .x(function(d) {
+                    return x(d.Perioden);
+                })
+                .y(function(d) {
+                    return y(d[topics[i].name])
+                })
+                .curve(d3.curveMonotoneX);
+
+            topics[i].setLine(line);
+
+            // define the area
+            let area = d3.area()
+                .x(function(d) { return x(d.Perioden); })
+                .y0(height)
+                .y1(function(d) {
+                    return y(d[topics[i].name])
+                });
+
+            topics[i].setArea(area);
+        }
 
         x.domain(d3.extent(data, function(d) {
             return d.Perioden}));
@@ -152,30 +162,6 @@ class StreamGraph {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain");
-
-        // color palette
-        var color = d3.scaleOrdinal()
-            .domain(topics)
-            .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
-
-        //stack the data?
-        var stackedData = d3.stack()
-            .offset(d3.stackOffsetSilhouette)
-            .keys(topics)
-            (this.parsedData)
-
-        // Show the areas
-        this.svg
-            .selectAll("mylayers")
-            .data(stackedData)
-            .enter()
-            .append("path")
-            .style("fill", function(d) { return color(d.key); })
-            .attr("d", d3.area()
-                .x(function(d, i) {return x(d.data.year); })
-                .y0(function(d) { return y(d[0]); })
-                .y1(function(d) { return y(d[1]); })
-            )
         // .remove();
 
         this.g.append("g")
@@ -187,40 +173,6 @@ class StreamGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
-
-        this.svg.append("rect")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .attr("class", "overlay")
-            .attr("width", width)
-            .attr("height", height)
-            // when the mouse enters the canvas, show the line
-            .on("mouseover", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "1");
-            })
-            // remove the line when leaving canvas
-            .on("mouseout", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "0");
-
-            })
-            .on("mousemove", function() {
-                let mouse = d3.mouse(this);
-                d3.select(".mouse-line")
-                    .attr("d", function() {
-                        let d = "M" + mouse[0] + "," + height;
-                        d += " " + mouse[0] + "," + 0;
-                        return d;
-                    });
-
-                // console.log(x.invert(d3.mouse(this)[0]))
-            });
-
-        this.g.append("path") // this is the black vertical line to follow mouse
-            .attr("class", "mouse-line")
-            .style("stroke", "black")
-            .style("stroke-width", "1px")
-            .style("opacity", "0");
 
     }
 
@@ -242,6 +194,13 @@ class StreamGraph {
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .attr("d", topic.line)); // apply smoothing to the line);
+
+        // add the area
+        this.g.append("path")
+            .data([this.parsedData])
+            .attr("class", "area")
+            .attr("fill", topic.color)
+            .attr("d", topic.area);
         addConsoleMessage("Line for '" + topic.name + "' category added <div class='c-bullet' style='background-color:" + topic.color + ";'></div>");
     }
 
