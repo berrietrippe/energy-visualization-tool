@@ -96,10 +96,9 @@ class SankeyGraph {
     setupGraph(data, topics, selector) {
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
-        let margin = { top: 40, right: 20, bottom: 30, left: 50 };
+        let margin = { top: 40, right: 20, bottom: 30, left: 20 };
         let width = svgWidth - margin.left - margin.right;
         let height = svgHeight - margin.top - margin.bottom;
-
 
         const sankey = d3.sankey()
             .size([width, height])
@@ -108,13 +107,19 @@ class SankeyGraph {
             .nodePadding(10)
             .nodeAlign(d3.sankeyCenter);
 
+
         let graph = sankey(data);
 
         this.svg = d3.select(selector)
             .attr("width", width)
             .attr("height", height);
 
-        let links = this.svg.append("g")
+        this.g = this.svg.append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")"
+            );
+
+        let links = this.g.append("g")
             .classed("links", true)
             .selectAll("path")
             .data(graph.links)
@@ -127,7 +132,7 @@ class SankeyGraph {
             .attr("stroke-width", d => d.width)
             .attr("stoke-opacity", 0.5);
 
-        let nodes = this.svg.append("g")
+        let nodes = this.g.append("g")
             .classed("nodes", true)
             .selectAll("rect")
             .data(graph.nodes)
@@ -142,13 +147,13 @@ class SankeyGraph {
             .attr("opacity", 0.8);
 
         // add in the title for the nodes
-        let text = this.svg.append("g")
+        let text = this.g.append("g")
             .selectAll("text")
             .data(graph.nodes)
             .enter().append("text")
-            .attr("x", d => d.x0 + (d.x1 - d.x0))
+            .attr("x", d => d.x0 + (d.x1 - d.x0) + 10)
             .attr("y", function(d) {
-                return d.y0 + (d.y1 - d.y0)/2; })
+                return d.y0 + (d.y1 - d.y0)/2 ; })
             .attr("transform", null)
             .attr("dy", ".35em")
             .text(function(d) { return d.id; })
