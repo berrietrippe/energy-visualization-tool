@@ -76,8 +76,9 @@ class SankeyGraph {
         this.selector = value - 1946;
     }
 
-    selectorCallback(selectorValue, extra = 0){
-        if (extra === 1){
+    selectorCallback(selectorValue, extra = null){
+        console.log(extra);
+        if (extra != null){
             this.otherSelector = this.otherPossibleSelectors[selectorValue];
         } else {
             this.selector = 2017 - 1946 - selectorValue;

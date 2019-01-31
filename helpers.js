@@ -460,7 +460,7 @@ function setFileSource(id, path_to_csv){
 }
 
 function selectorChanged(id, selector, extra = 0){
-    if (extra = 1){
+    if (extra == 1){
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value, extra);
     } else {
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value);
