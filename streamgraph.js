@@ -272,8 +272,6 @@ function addStreamGraph(){
         topics.push(new Topic(titles[i], true, getRandomColor(i)));
     }
 
-    let bar = $("#graphAdder");
-
     bar.before(getStreamGraphString(GRAPHCOUNT));
 
     let selectors = [

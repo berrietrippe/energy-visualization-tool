@@ -1,6 +1,8 @@
 
 let graphs = [];
 
+let bar = $("#graphAdder");
+
 let GRAPHCOUNT = 0;
 
 // let CSV_PATH = "data/test.csv";
@@ -15,7 +17,6 @@ $(document).ready(function(){
     setupData()
 });
 
-
 function setupData(){
     d3.csv(CSV_PATH, function(data){
         parseLineData(data);
@@ -26,10 +27,14 @@ function setupData(){
         console.log(streamData);
         dataSetupCompleted();
     });
+
+    doStuff();
 }
 
 function dataSetupCompleted(){
     // addExtendedLineGraph();
     // addStreamGraph();
-    addLineGraph();
+    // addLineGraph();
+    addSankeyGraph();
 }
+

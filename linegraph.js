@@ -24,6 +24,8 @@ class LineGraph {
 
         this.selectors = [this.possibleSelectors[0]];
 
+        console.log(this.possibleSelectors);
+
         this.topics = topics;
         this.xAxis = xAxisId;
         this.possibleSelectors = selectors;
@@ -64,26 +66,6 @@ class LineGraph {
             graph.xAxis);
         graph.showAllSelectedTopics();
         // showTable("#o-data-table-1", parsedData);
-    }
-
-    setData(data){
-        this.data = data;
-    }
-
-    setPathToCSV(path_to_csv){
-        this.path_to_csv = path_to_csv;
-    }
-
-    setTopics(topics){
-        this.topics = topics;
-    }
-
-    setSelectedTopics(topics){
-        this.selectedTopics = topics;
-    }
-
-    setXAxis(xAxis){
-        this.xAxis = xAxis;
     }
 
     selectorCallback(selectorValue){
@@ -173,40 +155,40 @@ class LineGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
-        //
-        // this.svg.append("rect")
-        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        //     .attr("class", "overlay")
-        //     .attr("width", width)
-        //     .attr("height", height)
-        //     // when the mouse enters the canvas, show the line
-        //     .on("mouseover", function() {
-        //         d3.select(".mouse-line")
-        //             .style("opacity", "1");
-        //     })
-        //     // remove the line when leaving canvas
-        //     .on("mouseout", function() {
-        //         d3.select(".mouse-line")
-        //             .style("opacity", "0");
-        //
-        //     })
-        //     .on("mousemove", function() {
-        //         let mouse = d3.mouse(this);
-        //         d3.select(".mouse-line")
-        //             .attr("d", function() {
-        //                 let d = "M" + mouse[0] + "," + height;
-        //                 d += " " + mouse[0] + "," + 0;
-        //                 return d;
-        //             });
-        //
-        //         // console.log(x.invert(d3.mouse(this)[0]))
-        //     });
-        //
-        // this.g.append("path") // this is the black vertical line to follow mouse
-        //     .attr("class", "mouse-line")
-        //     .style("stroke", "black")
-        //     .style("stroke-width", "1px")
-        //     .style("opacity", "0");
+
+        this.svg.append("rect")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("class", "overlay")
+            .attr("width", width)
+            .attr("height", height)
+            // when the mouse enters the canvas, show the line
+            .on("mouseover", function() {
+                d3.select(".mouse-line")
+                    .style("opacity", "1");
+            })
+            // remove the line when leaving canvas
+            .on("mouseout", function() {
+                d3.select(".mouse-line")
+                    .style("opacity", "0");
+
+            })
+            .on("mousemove", function() {
+                let mouse = d3.mouse(this);
+                d3.select(".mouse-line")
+                    .attr("d", function() {
+                        let d = "M" + mouse[0] + "," + height;
+                        d += " " + mouse[0] + "," + 0;
+                        return d;
+                    });
+
+                // console.log(x.invert(d3.mouse(this)[0]))
+            });
+
+        this.g.append("path") // this is the black vertical line to follow mouse
+            .attr("class", "mouse-line")
+            .style("stroke", "black")
+            .style("stroke-width", "1px")
+            .style("opacity", "0");
 
     }
 
@@ -261,7 +243,7 @@ class LineGraph {
         if (this.selectors.length > 0){
             for (let i = 0; i < this.selectors.length; i++){
                 title += this.selectors[i];
-                title += " (PJ)";
+                title += "";
             }
         } else {
             title += "graph";
@@ -320,26 +302,24 @@ function addLineGraph(){
     let titles = ["Perioden",
         // "Totaal aanbod",
         "Winning",
+        "Totaal energieverbruik",
         "Invoer",
         "Uitvoer",
         "Invoersaldo",
         "Bunkering",
         // "Energieaanbod/Voorraadmutatie (PJ)","Statistische verschillen (PJ)",
-        "Totaal energieverbruik",
         // "Energieomzetting/Inzet energie voor omzetting/Totaal inzet (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Inzet energie voor omzetting/Inzet andere omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Totaal productie (PJ)","Energieomzetting/Productie energie uit omzetting/Productie elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Productie energie uit omzetting/Productie andere omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Totaal saldo energieomzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo elektriciteit/WKK-omzetting (PJ)","Energieomzetting/Saldo inzet-productie energie/Saldo andere omzetting (PJ)","Eigen verbruik energiesector/Totaal (PJ)","Eigen verbruik energiesector/Olie- en gaswinning (PJ)","Eigen verbruik energiesector/Cokesfabrieken (PJ)","Eigen verbruik energiesector/Raffinaderijen (PJ)","Eigen verbruik energiesector/Totaal energiebedrijven (PJ)","Verliezen bij distributie (PJ)","Finaal verbruik/Totaal finaal verbruik (PJ)","Finaal verbruik/Finaal energieverbruik/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/IJzer- en staalindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Chemie en farmaceutische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Non-ferrometalenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwmaterialenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Transportmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Metaalproducten en machine-industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Delfstoffenwinning (geen olie en gas) (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Voedings- en genotmiddelenindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Papier- en grafische industrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Houtindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Bouwnijverheid (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Textiel-, kleding- en lederindustrie (PJ)","Finaal verbruik/Finaal energieverbruik/Nijverheid (exclusief de energiesector)/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse luchtvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Wegverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Railverkeer (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Pijpleidingen (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Binnenlandse scheepvaart (PJ)","Finaal verbruik/Finaal energieverbruik/Vervoer/Onbekend (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Totaal (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Diensten, afval, water en reparatie (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Woningen (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Landbouw (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Visserij (PJ)","Finaal verbruik/Finaal energieverbruik/Overige afnemers/Onbekend (PJ)","Finaal verbruik/Niet-energetisch gebruik/Totaal (PJ)","Finaal verbruik/Niet-energetisch gebruik/Nijverheid (exclusief de energiesector) (PJ)","Finaal verbruik/Niet-energetisch gebruik/Waarvan chemie en petrochemie (PJ)","Finaal verbruik/Niet-energetisch gebruik/Vervoer (PJ)","Finaal verbruik/Niet-energetisch gebruik/Overige afnemers (PJ)"
     ];
 
     for (let i = 0; i < titles.length; i++){
-        topics.push(new Topic(titles[i], i <= 1, getRandomColor(i)));
+        topics.push(new Topic(titles[i], i <= 2, getRandomColor(i)));
     }
-
-    let bar = $("#graphAdder");
 
     bar.before(getLineGraphString(GRAPHCOUNT));
 
     let graph = new LineGraph(
         null,
-        "Totaal energiedragers (PJ)",
+        "Totaal energiedragers",
         lineData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
         null,
