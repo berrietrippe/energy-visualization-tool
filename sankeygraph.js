@@ -51,7 +51,7 @@ class SankeyGraph {
         };
 
         for (let key in elements){
-            if (this.data[this.selector][elements[key]] !== 0){
+            if (this.data[this.selector][elements[key]] > 0){
                 this.parsedData.nodes.push({ id : elements[key], color : this.colorList[elements[key]]});
             }
         }
@@ -156,7 +156,12 @@ class SankeyGraph {
                 return d.y0 + (d.y1 - d.y0)/2 ; })
             .attr("transform", null)
             .attr("dy", ".35em")
-            .text(function(d) { return d.id; })
+            .text(function(d) {
+                if (d.value > 0){
+                    return d.id;
+                    }
+
+            })
             .filter(function(d) { return d.x < width / 2; })
             .attr("x", d => d.x0)
             .attr("text-anchor", "start");
@@ -199,23 +204,26 @@ function computeLinks(hierarchy, data){
     if (Object.keys(hierarchy).length > 0){
         for (let key in hierarchy){
             if (Object.keys(hierarchy[key]).length > 0){
-                for (let subkey in hierarchy[key]){
-                    let targetValue = data[subkey];
-                    if (targetValue > 0){
-                        let newLink = {
-                            source : "",
-                            target : "",
-                            value : ""
-                        };
-                        newLink.source = key;
-                        newLink.target = subkey;
-                        newLink.value = targetValue;
-                        links.push(newLink);
+                let sourceValue = data[key];
+                if (sourceValue > 0) {
+                    for (let subkey in hierarchy[key]){
+                        let targetValue = data[subkey];
+                        if (targetValue > 0 && sourceValue > 0) {
+                            let newLink = {
+                                source: "",
+                                target: "",
+                                value: ""
+                            };
+                            newLink.source = key;
+                            newLink.target = subkey;
+                            newLink.value = targetValue;
+                            links.push(newLink);
+                        }
                     }
+                    let childLinks = computeLinks(hierarchy[key], data);
+                    links.push.apply(links, childLinks);
                 }
             }
-            let childLinks = computeLinks(hierarchy[key], data);
-            links.push.apply(links, childLinks);
         }
     }
 

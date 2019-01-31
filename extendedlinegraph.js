@@ -268,9 +268,6 @@ function addExtendedLineGraph(){
         "Totaal aardoliegrondstoffen en producten",
         "Aardgas",
         "Hernieuwbare energie",
-        "Totaal windenergie",
-        "Omgevingsenergie",
-        "Totaal biomassa",
         "Elektriciteit",
         "Warmte",
         "Totaal overige energiedragers"
