@@ -247,24 +247,24 @@ let hierarchy = { "Totaal energiedragers" :
                 }
             },
         "Totaal aardoliegrondstoffen en producten" : {
-            "Totaal aardolieproducten" : {
-                "Restgassen uit olie": {},
-                "Lpg": {},
-                "Nafta": {},
-                "Motorbenzine": {},
-                "Jetfuel op benzinebasis": {},
-                "Vliegtuigbenzine": {},
-                "Vliegtuigkerosine": {},
-                "Overige kerosine (petroleum)": {},
-                "Gas-, dieselolie en lichte stookolie": {},
-                "Zware stookolie": {},
-                "Terpentine en speciale benzine": {},
-                "Smeermiddelen": {},
-                "Bitumen": {},
-                "Minerale wassen": {},
-                "Petroleumcokes": {},
-                "Overige aardolieproducten": {}
-            },
+            // "Totaal aardolieproducten" : {
+            //     "Restgassen uit olie": {},
+            //     "Lpg": {},
+            //     "Nafta": {},
+            //     "Motorbenzine": {},
+            //     "Jetfuel op benzinebasis": {},
+            //     "Vliegtuigbenzine": {},
+            //     "Vliegtuigkerosine": {},
+            //     "Overige kerosine (petroleum)": {},
+            //     "Gas-, dieselolie en lichte stookolie": {},
+            //     "Zware stookolie": {},
+            //     "Terpentine en speciale benzine": {},
+            //     "Smeermiddelen": {},
+            //     "Bitumen": {},
+            //     "Minerale wassen": {},
+            //     "Petroleumcokes": {},
+            //     "Overige aardolieproducten": {}
+            // },
             "Totaal aardoliegrondstoffen" : {
                 "Ruwe aardolie" : {},
                 "Aardgascondensaat" : {},
