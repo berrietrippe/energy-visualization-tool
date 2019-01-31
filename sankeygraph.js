@@ -130,7 +130,8 @@ class SankeyGraph {
             .attr("fill", "none")
             .attr("stroke", d => d.target.color)
             .attr("stroke-width", d => d.width)
-            .attr("stoke-opacity", 0.5);
+            .attr("opacity", 0.6)
+            .attr("stoke-opacity", 1);
 
         let nodes = this.g.append("g")
             .classed("nodes", true)
@@ -144,7 +145,7 @@ class SankeyGraph {
             .attr("width", d => d.x1 - d.x0)
             .attr("height", d => d.y1 - d.y0)
             .attr("fill", d => d.color)
-            .attr("opacity", 0.8);
+            .attr("opacity", 1);
 
         // add in the title for the nodes
         let text = this.g.append("g")
