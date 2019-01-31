@@ -25,6 +25,12 @@ class SankeyGraph {
         this.selector = this.possibleSelectors[0];
         this.selectors = [this.selector];
 
+        let elements = getElementsOfHierarchy(hierarchy);
+        this.colorList = {};
+        for (let i in elements){
+            this.colorList[elements[i]] = getRandomColor(i);
+        }
+
         this.topic = "Totaal energieverbruik";
 
         this.data = this.data[this.topic];
@@ -46,7 +52,7 @@ class SankeyGraph {
 
         for (let key in elements){
             if (this.data[this.selector][elements[key]] !== 0){
-                this.parsedData.nodes.push({ id : elements[key]});
+                this.parsedData.nodes.push({ id : elements[key], color : this.colorList[elements[key]]});
             }
         }
 
@@ -117,9 +123,7 @@ class SankeyGraph {
             .classed("link", true)
             .attr("d", d3.sankeyLinkHorizontal())
             .attr("fill", "none")
-            .attr("stroke", function(d){
-                return getRandomColor(d.target.index)
-            })
+            .attr("stroke", d => d.target.color)
             .attr("stroke-width", d => d.width)
             .attr("stoke-opacity", 0.5);
 
@@ -134,9 +138,7 @@ class SankeyGraph {
             .attr("y", d => d.y0)
             .attr("width", d => d.x1 - d.x0)
             .attr("height", d => d.y1 - d.y0)
-            .attr("fill", function(d){
-                return getRandomColor(d.index)
-            })
+            .attr("fill", d => d.color)
             .attr("opacity", 0.8);
 
         // add in the title for the nodes
