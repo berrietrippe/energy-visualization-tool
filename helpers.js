@@ -342,10 +342,10 @@ function updateTopicList(graphId, topics, xAxis, checkboxes = true){
     }
 }
 
-function updateSelectorList(graphId, selectors){
+function updateSelectorList(graphId, selectors, extra = ""){
     // $("#selectorList-" + graphId).html(" ");
     for (let i = 0; i < selectors.length; i++){
-        $("#selectorList-" + graphId).append("<option value=" + i + ">" + selectors[i] + "</option>");
+        $("#selectorList" + extra + "-" + graphId).append("<option value=" + i + ">" + selectors[i] + "</option>");
     }
 }
 
@@ -459,7 +459,11 @@ function setFileSource(id, path_to_csv){
     $("#o-filename-" + id).html(path_to_csv);
 }
 
-function selectorChanged(id, selector){
-    graphs[id].selectorCallback(selector.options[selector.selectedIndex].value);
+function selectorChanged(id, selector, extra = 0){
+    if (extra = 1){
+        graphs[id].selectorCallback(selector.options[selector.selectedIndex].value, extra);
+    } else {
+        graphs[id].selectorCallback(selector.options[selector.selectedIndex].value);
+    }
 
 }

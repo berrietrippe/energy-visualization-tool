@@ -147,10 +147,10 @@ function getSankeyGraphString(id){
         ''+
         '                <hr>'+
         ''+
-        '                <h6>Kind of energy</h6>'+
-        '                <ul id="topicList-' + id + '" style="font-size:0.8rem;" class="o-selector-list">'+
-        ''+
-        '                </ul>'+
+        '                <h6>Category</h6>'+
+        '                <select style="max-width:100%;" id="selectorList1-' + id + '" onchange="selectorChanged(' + id + ', this, 1)">'+
+        '                </select>'+
+        '                <hr>'+
         '            </div>'+
         ''+
         '        </div>'+

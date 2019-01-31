@@ -3,7 +3,7 @@
  * SankeyGraph class used to represent a graph in our application
  */
 class SankeyGraph {
-    constructor(id, title, selectors, data){
+    constructor(id, title, selectors, other_selector, data){
 
         // auto increment iets
         if (id == null){
@@ -25,20 +25,20 @@ class SankeyGraph {
         this.selector = this.possibleSelectors[0];
         this.selectors = [this.selector];
 
+        this.otherPossibleSelectors = other_selector;
+        this.otherSelector = this.otherPossibleSelectors[0];
+
         let elements = getElementsOfHierarchy(hierarchy);
         this.colorList = {};
         for (let i in elements){
             this.colorList[elements[i]] = getRandomColor(i);
-        }
-
-        this.topic = "Totaal energieverbruik";
-
-        this.data = this.data[this.topic];
+        };
 
         this.setSelector(this.selector);
 
         this.setupData();
         this.updateGraphSelectorList();
+        updateSelectorList(this.id, this.otherPossibleSelectors, 1)
     }
 
     setupData(){
@@ -50,13 +50,15 @@ class SankeyGraph {
             links : []
         };
 
+        let data = this.data[this.otherSelector];
+
         for (let key in elements){
-            if (this.data[this.selector][elements[key]] > 0){
+            if (data[this.selector][elements[key]] > 0){
                 this.parsedData.nodes.push({ id : elements[key], color : this.colorList[elements[key]]});
             }
         }
 
-        this.parsedData.links = computeLinks(hierarchy, this.data[this.selector]);
+        this.parsedData.links = computeLinks(hierarchy, data[this.selector]);
 
         console.log(this.parsedData);
 
@@ -74,8 +76,12 @@ class SankeyGraph {
         this.selector = value - 1946;
     }
 
-    selectorCallback(selectorValue){
-        this.selector = 2017 - 1946 - selectorValue;
+    selectorCallback(selectorValue, extra = 0){
+        if (extra === 1){
+            this.otherSelector = this.otherPossibleSelectors[selectorValue];
+        } else {
+            this.selector = 2017 - 1946 - selectorValue;
+        }
         this.redrawGraph();
     }
 
@@ -236,6 +242,15 @@ function addSankeyGraph(){
     let selectors =
             ["1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"];
 
+    let other_selector = [
+        "Totaal energieverbruik",
+        "Winning",
+        "Invoer",
+        "Uitvoer",
+        "Invoersaldo",
+        "Bunkering",
+    ];
+
     // insert graph into html
     bar.before(getSankeyGraphString(GRAPHCOUNT));
 
@@ -243,6 +258,7 @@ function addSankeyGraph(){
         null,
         "Flow",
         selectors,
+        other_selector,
         extendedData
     ));
 
