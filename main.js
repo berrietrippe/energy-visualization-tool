@@ -11,7 +11,7 @@ let SELECTIONCOUNT = 0;
 let GRAPHCOUNT = 0;
 
 // let CSV_PATH = "data/test.csv";
-let CSV_PATH = "data/Energiebalans__aanbod__verbruik_29012019_213919.csv";
+let CSV_PATH = "data/Vertaald_Energiebalans__aanbod__verbruik_29012019_213919.csv";
 
 let lineData = null;
 let extendedData = null;

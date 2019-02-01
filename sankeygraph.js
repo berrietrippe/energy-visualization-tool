@@ -254,10 +254,10 @@ function getNewSankeyGraph(){
 
     let other_selector = [
         "Totaal energieverbruik",
-        "Winning",
+        "Production",
         "Invoer",
-        "Uitvoer",
-        "Invoersaldo",
+        "Export",
+        "Import balance",
         "Bunkering",
     ];
 

@@ -133,7 +133,7 @@ class ExtendedLineGraph {
             // y.domain(d3.extent(data, function(d) { return d.value }));
             let line = d3.line()
                 .x(function(d) {
-                    return x(d.Perioden);
+                    return x(d.Periods);
                 })
                 .y(function(d) {
                     return y(d[topics[i].name])
@@ -144,7 +144,7 @@ class ExtendedLineGraph {
         }
 
         x.domain(d3.extent(data, function(d) {
-            return d.Perioden}));
+            return d.Periods}));
 
         this.g.append("g")
             .attr("class", "axis")
@@ -281,10 +281,10 @@ function getNewExtendedLineGraph(){
 
     let selectors = [
         "Totaal energieverbruik",
-        "Winning",
-        "Invoer",
+        "Production",
+        "Import",
         "Uitvoer",
-        "Invoersaldo",
+        "Import balance",
         "Bunkering",
     ];
 

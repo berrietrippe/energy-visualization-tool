@@ -135,7 +135,7 @@ class StreamGraph {
             // y.domain(d3.extent(data, function(d) { return d.value }));
             let line = d3.line()
                 .x(function(d) {
-                    return x(d.Perioden);
+                    return x(d.Periods);
                 })
                 .y(function(d) {
                     return y(d[topics[i].name]);
@@ -146,7 +146,7 @@ class StreamGraph {
 
             // define the area
             let area = d3.area()
-                .x(function(d) { return x(d.Perioden); })
+                .x(function(d) { return x(d.Periods); })
                 .y0(height)
                 .y1(function(d) {
                     return y(d[topics[i].name]);
@@ -156,7 +156,7 @@ class StreamGraph {
         }
 
         x.domain(d3.extent(data, function(d) {
-            return d.Perioden}));
+            return d.Periods}));
 
         this.g.append("g")
             .attr("class", "axis")
@@ -278,10 +278,10 @@ function getNewStreamGraph(){
 
     let selectors = [
         "Totaal energieverbruik",
-        "Winning",
+        "Production",
         "Invoer",
-        "Uitvoer",
-        "Invoersaldo",
+        "Export",
+        "Import balance",
         "Bunkering",
     ];
 

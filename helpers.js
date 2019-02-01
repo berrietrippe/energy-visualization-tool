@@ -43,7 +43,7 @@ function getValues(row, rowSelectors){
                 for (let key in row){
                     let value = row[key];
                     // if date
-                    if (key === "Perioden"){
+                    if (key === "Periods"){
                         value = new Date(value);
                     } else {
                         value = purifyValue(value);
@@ -90,29 +90,29 @@ function parseExtendedData(data){
     let container = {};
 
     let selectors = [
-        "Totaal energieverbruik",
-        "Winning",
-        "Invoer",
-        "Uitvoer",
-        "Invoersaldo",
+        "Total energy use",
+        "Production",
+        "Import",
+        "Export",
+        "Import balance",
         "Bunkering",
     ];
 
     let titles = [
-        "Totaal kool en koolproducten",
-        "Totaal aardoliegrondstoffen en producten",
-        "Aardgas",
-        "Hernieuwbare energie",
-        "Windernergie op zee",
-        "Omgevingsenergie",
-        "Totaal biomassa",
-        "Elektriciteit",
-        "Warmte",
-        "Totaal overige energiedragers"
+        "Total energy carriers",
+        "Total coal and coal products",
+        "Natural gas",
+        "Renewable energy",
+        "Wind energy on land",
+        "Environmental energy",
+        "Total biomass",
+        "Electricity",
+        "Heat",
+        "Energy from other sources"
     ];
 
     // get a list of all unique selectors
-    let uniqueYears = getUniqueSelectors(data, ["Perioden"]);
+    let uniqueYears = getUniqueSelectors(data, ["Periods"]);
 
     for (let j = 0; j < selectors.length; j++){
         container[selectors[j]] = {};
@@ -123,11 +123,11 @@ function parseExtendedData(data){
     }
 
     for (let i = 0; i < data.length; i++){
-        let year = data[i]["Perioden"];
+        let year = data[i]["Periods"];
 
         for (let j = 0; j < selectors.length; j++){
 
-            container[selectors[j]][year][data[i]["Energiedragers"]] = data[i][selectors[j]];
+            container[selectors[j]][year][data[i]["Energy Carriers"]] = data[i][selectors[j]];
         }
     }
 
@@ -150,7 +150,7 @@ function parseExtendedData(data){
 
             entry["MAX"] = max;
 
-            entry["Perioden"] = new Date(year);
+            entry["Periods"] = new Date(year);
             newData[selectors[i]].push(entry);
         }
     }
@@ -166,16 +166,16 @@ function parseStreamData(data){
 function normalizeData(data){
 
     let topics = [
-        "Totaal kool en koolproducten",
-        "Totaal aardoliegrondstoffen en producten",
-        "Aardgas",
-        "Hernieuwbare energie",
-        "Windernergie op zee",
-        "Omgevingsenergie",
-        "Totaal biomassa",
-        "Elektriciteit",
-        "Warmte",
-        "Totaal overige energiedragers"
+        "Total energy carriers",
+        "Total coal and coal products",
+        "Natural gas",
+        "Renewable energy",
+        "Wind energy on land",
+        "Environmental energy",
+        "Total biomass",
+        "Electricity",
+        "Heat",
+        "Energy from other sources"
     ];
 
     topics.reverse();
@@ -245,7 +245,7 @@ function getMaxVal(data, layers, topics) {
         for (let i = 0; i < topics.length; i++){
             let value = data[topics[i]];
             if (!isNaN(value)){
-                if (topics[i] != "Perioden"){
+                if (topics[i] != "Periods"){
                     if (value > max){
                         max = value;
                     }
@@ -280,7 +280,7 @@ function getMinVal(data, layers, topics) {
         for (let i = 0; i < topics.length; i++){
             let value = data[topics[i]];
             if (!isNaN(value)){
-                if (topics[i] != "Perioden"){
+                if (topics[i] != "Periods"){
                     if (value < min){
                         min = value;
                     }
