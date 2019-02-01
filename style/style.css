@@ -134,7 +134,6 @@ svg {
     .selection .selection-body .o-graph.o-graph-large {
       width: 1400px; }
     .selection .selection-body .o-graph .o-editor {
-      padding-right: 50px !important;
       border-right: 1px solid lightgray;
       position: relative; }
       .selection .selection-body .o-graph .o-editor .control {

@@ -168,6 +168,7 @@ class SankeyGraph {
             .selectAll("text")
             .data(graph.nodes)
             .enter().append("text")
+            .attr("font-size", "0.8rem")
             .attr("x", d => d.x0 + (d.x1 - d.x0) + 10)
             .attr("y", function(d) {
                 return d.y0 + (d.y1 - d.y0)/2 ; })
@@ -190,11 +191,9 @@ class SankeyGraph {
 
     getNewTitle() {
         let title = "";
-        if (this.selectors.length > 0){
-            for (let i = 0; i < this.selectors.length; i++){
-                title += this.selectors[i];
-                title += ", normalized";
-            }
+        if (this.otherSelector.length > 0){
+                title += this.otherSelector;
+                // title += ", normalized";
         } else {
             title += "graph";
             title += this.id;
@@ -263,7 +262,7 @@ function getNewSankeyGraph(){
 
     let graph = new SankeyGraph(
         null,
-        "Flow",
+        "Totaal energieverbruik",
         selectors,
         other_selector,
         extendedData

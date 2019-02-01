@@ -7,9 +7,9 @@ function getSelectionString(id){
         '                <div class="col p-3 o-menu">'+
         '                    <h5>Selection</h5>'+
         '                    <label for="yearFrom">From:</label>'+
-        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 0)" id="yearFrom-' + id + '" value="1946"></input>'+
+        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 0)" id="yearFrom-' + id + '" value="1946" type="number" min="1946" max="2016"></input>'+
         '                    <label for="yearTo">To:</label>'+
-        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 1)" id="yearTo-' + id + '" value="2017"></input>'+
+        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 1)" id="yearTo-' + id + '" value="2017" type="number" min="1947" max="2017"></input>'+
         '                </div>'+
         '            </div>'+
         '        </div>'+
@@ -48,7 +48,8 @@ function getSelectionString(id){
         '            <!--</div>-->'+
         '        </div>'+
         '    </div>'+
-        '</div>';
+        '</div>' +
+        '</br>';
 
         return selection;
 }
@@ -112,7 +113,7 @@ function getExtendedLineGraphString(id){
             '                <hr>'+
             ''+
             '                <h6>Kind of energy</h6>'+
-            '                <ul id="topicList-' + id + '" style="font-size:0.8rem; word-break:break-word;" class="o-selector-list">'+
+            '                <ul id="topicList-' + id + '" style="font-size:0.8rem; word-break:break-word;white-space: normal;" class="o-selector-list">'+
             ''+
             '                </ul>'+
         '                <hr>'+
