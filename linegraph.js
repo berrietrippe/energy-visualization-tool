@@ -3,7 +3,7 @@
  * LineGraph class used to represent a graph in our application
  */
 class LineGraph {
-    constructor(id, title, data, selectors, topics, xAxisId){
+    constructor(id, selection, title, data, selectors, topics, xAxisId){
 
         // auto increment iets
         if (id == null){
@@ -23,6 +23,8 @@ class LineGraph {
         }
 
         this.selectors = [this.possibleSelectors[0]];
+
+        this.selection = selection;
 
         console.log(this.possibleSelectors);
 
@@ -115,13 +117,15 @@ class LineGraph {
         this.g = this.svg.append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")"
-            );
+            )
+            .attr("width", width)
+            .attr("height", height)
+            .attr("overflow", "hidden");
 
         let x = d3.scaleTime().range([0, width]);
         let y = d3.scaleLinear()
             .domain([minValue, maxValue])
             .range([height, 0]);
-
 
         for (let i = xAxis; i < topics.length; i++){
             // y.domain(d3.extent(data, function(d) { return d.value }));
@@ -130,15 +134,25 @@ class LineGraph {
                     return x(d.Perioden);
                 })
                 .y(function(d) {
-                    return y(d[topics[i].name])
+                    return y(d[topics[i].name]);
                 })
                 .curve(d3.curveMonotoneX);
 
             topics[i].setLine(line);
         }
 
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
+
         x.domain(d3.extent(data, function(d) {
-            return d.Perioden}));
+            if (d.Perioden < minDate) {
+                return minDate;
+            } else if (d.Perioden > maxDate){
+                return maxDate;
+            } else {
+                return d.Perioden;
+            }
+        }));
 
         this.g.append("g")
             .attr("class", "axis")
@@ -157,40 +171,40 @@ class LineGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
-
-        this.svg.append("rect")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .attr("class", "overlay")
-            .attr("width", width)
-            .attr("height", height)
-            // when the mouse enters the canvas, show the line
-            .on("mouseover", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "1");
-            })
-            // remove the line when leaving canvas
-            .on("mouseout", function() {
-                d3.select(".mouse-line")
-                    .style("opacity", "0");
-
-            })
-            .on("mousemove", function() {
-                let mouse = d3.mouse(this);
-                d3.select(".mouse-line")
-                    .attr("d", function() {
-                        let d = "M" + mouse[0] + "," + height;
-                        d += " " + mouse[0] + "," + 0;
-                        return d;
-                    });
-
-                // console.log(x.invert(d3.mouse(this)[0]))
-            });
-
-        this.g.append("path") // this is the black vertical line to follow mouse
-            .attr("class", "mouse-line")
-            .style("stroke", "black")
-            .style("stroke-width", "1px")
-            .style("opacity", "0");
+        //
+        // this.svg.append("rect")
+        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        //     .attr("class", "overlay")
+        //     .attr("width", width)
+        //     .attr("height", height)
+        //     // when the mouse enters the canvas, show the line
+        //     .on("mouseover", function() {
+        //         d3.select(".mouse-line")
+        //             .style("opacity", "1");
+        //     })
+        //     // remove the line when leaving canvas
+        //     .on("mouseout", function() {
+        //         d3.select(".mouse-line")
+        //             .style("opacity", "0");
+        //
+        //     })
+        //     .on("mousemove", function() {
+        //         let mouse = d3.mouse(this);
+        //         d3.select(".mouse-line")
+        //             .attr("d", function() {
+        //                 let d = "M" + mouse[0] + "," + height;
+        //                 d += " " + mouse[0] + "," + 0;
+        //                 return d;
+        //             });
+        //
+        //         // console.log(x.invert(d3.mouse(this)[0]))
+        //     });
+        //
+        // this.g.append("path") // this is the black vertical line to follow mouse
+        //     .attr("class", "mouse-line")
+        //     .style("stroke", "black")
+        //     .style("stroke-width", "1px")
+        //     .style("opacity", "0");
 
     }
 
@@ -202,10 +216,15 @@ class LineGraph {
         }
     }
 
+
     showLine(topicId){
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
         let topic = this.topics[topicId];
         topic.setPath(this.g.append("path")
-            .datum(this.parsedData)
+            .datum(this.parsedData.filter(function(d){
+                return d.Perioden >= minDate && d.Perioden <= maxDate;
+            }))
             .attr("fill", "none")
             .attr("stroke", topic.color)
             .attr("stroke-linejoin", "round")
@@ -298,7 +317,7 @@ class Topic {
     }
 }
 
-function getNewLineGraph(){
+function getNewLineGraph(selection){
     let topics = [];
 
     let titles = ["Perioden",
@@ -319,6 +338,7 @@ function getNewLineGraph(){
 
     let graph = new LineGraph(
         null,
+        selection,
         "Totaal energiedragers",
         lineData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",

@@ -3,7 +3,7 @@
  * StreamGraph class used to represent a graph in our application
  */
 class ExtendedLineGraph {
-    constructor(id, title, data, selectors, topics, xAxisId){
+    constructor(id, selection, title, data, selectors, topics, xAxisId){
 
         // auto increment iets
         if (id == null){
@@ -26,6 +26,8 @@ class ExtendedLineGraph {
         this.title = title;
         this.data = data;
         this.parsedData = null;
+
+        this.selection = selection;
 
         this.setupData();
         this.updateGraphTopicList();
@@ -143,8 +145,18 @@ class ExtendedLineGraph {
             topics[i].setLine(line);
         }
 
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
+
         x.domain(d3.extent(data, function(d) {
-            return d.Perioden}));
+            if (d.Perioden < minDate) {
+                return minDate;
+            } else if (d.Perioden > maxDate){
+                return maxDate;
+            } else {
+                return d.Perioden;
+            }
+        }));
 
         this.g.append("g")
             .attr("class", "axis")
@@ -209,9 +221,13 @@ class ExtendedLineGraph {
     }
 
     showLine(topicId){
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
         let topic = this.topics[topicId];
         topic.setPath(this.g.append("path")
-            .datum(this.parsedData)
+            .datum(this.parsedData.filter(function(d){
+                return d.Perioden >= minDate && d.Perioden <= maxDate;
+            }))
             .attr("fill", "none")
             .attr("stroke", topic.color)
             .attr("stroke-linejoin", "round")
@@ -262,7 +278,7 @@ class ExtendedLineGraph {
 
 }
 
-function getNewExtendedLineGraph(){
+function getNewExtendedLineGraph(selection){
     let topics = [];
 
     let titles = [
@@ -290,6 +306,7 @@ function getNewExtendedLineGraph(){
 
     let graph = new ExtendedLineGraph(
         null,
+        selection,
         "Totaal energieverbruik",
         extendedData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",

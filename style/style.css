@@ -4,6 +4,9 @@ body, html {
   overflow-x: hidden;
   overflow-y: auto; }
 
+svg {
+  overflow: hidden; }
+
 .o-visualization {
   width: 100%;
   height: 100%;

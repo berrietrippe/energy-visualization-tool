@@ -493,3 +493,6 @@ function selectorChanged(id, selector, extra = 0){
 
 }
 
+function updateRangeSelector(element, id, fromTo){
+    selections[id].updateRange(fromTo, element.value);
+}

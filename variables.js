@@ -7,9 +7,9 @@ function getSelectionString(id){
         '                <div class="col p-3 o-menu">'+
         '                    <h5>Selection</h5>'+
         '                    <label for="yearFrom">From:</label>'+
-        '                    <input name="" style="width:80px;" id="yearFrom" value="1946"></input>'+
+        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 0)" id="yearFrom-' + id + '" value="1946"></input>'+
         '                    <label for="yearTo">To:</label>'+
-        '                    <input name="" style="width:80px;" id="yearTo" value="2017"></input>'+
+        '                    <input name="" style="width:80px;" onchange="updateRangeSelector(this, ' + id + ', 1)" id="yearTo-' + id + '" value="2017"></input>'+
         '                </div>'+
         '            </div>'+
         '        </div>'+
@@ -197,6 +197,11 @@ function getSankeyGraphString(id){
             '            <div class="o-editor  h-100 p-3 w-100">'+
                             ' <i class="control fa fa-bars" onclick="closeControls(' + id + ', true)"></i>' +
             '                <h5>Sankey graph #' + id + '</h5>'+
+            '                <hr>'+
+            '                <h6>Date range selector</h6>'+
+            '                <select style="max-width:100%;" id="selectorList-' + id + '" onchange="selectorChanged(' + id + ', this)">'+
+            '                </select>'+
+            ''+
             '                <hr>'+
             '                <h6>Category</h6>'+
             '                <select style="max-width:100%;" id="selectorList1-' + id + '" onchange="selectorChanged(' + id + ', this, 1)">'+

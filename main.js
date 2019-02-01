@@ -6,7 +6,6 @@ let graphs = {};
 let selectionBar = $("#selectorBar");
 let bar = $("#graphAdder");
 
-
 let SELECTIONCOUNT = 0;
 let GRAPHCOUNT = 0;
 
@@ -72,31 +71,28 @@ class Selection {
 
     addLineGraphToSelection(){
         $("#graphAdder-" + this.id).before(getLineGraphString(GRAPHCOUNT));
-        let graph = getNewLineGraph();
-        graph.parentSelection = this;
+        let graph = getNewLineGraph(this);
         graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
     addExtendedLineGraphToSelection(){
         $("#graphAdder-" + this.id).before(getExtendedLineGraphString(GRAPHCOUNT));
-        let graph = getNewExtendedLineGraph();
-        graph.parentSelection = this;
+        let graph = getNewExtendedLineGraph(this);
         graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
     addStreamGraphToSelection(){
         $("#graphAdder-" + this.id).before(getStreamGraphString(GRAPHCOUNT));
-        let graph = getNewStreamGraph();
-        graph.parentSelection = this;
+        let graph = getNewStreamGraph(this);
         graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
     addSankeyGraphToSelection(){
         $("#graphAdder-" + this.id).before(getSankeyGraphString(GRAPHCOUNT));
-        let graph = getNewSankeyGraph();
+        let graph = getNewSankeyGraph(this);
         graph.parentSelection = this;
         graphs[graph.id] = graph;
         this.graphs.push(graph.id);
@@ -104,6 +100,21 @@ class Selection {
 
     removeGraph(id){
         this.graphs.splice(id, 1);
+    }
+
+    updateRange(fromTo, value){
+        if (fromTo === 0){
+            this.from = value;
+        } else {
+            this.to = value;
+        }
+        console.log("Selection " + this.id + ":");
+        console.log(this.from);
+        console.log(this.to);
+
+        for (let graph in this.graphs){
+            graphs[this.graphs[graph]].redrawGraph();
+        }
     }
 }
 
@@ -131,6 +142,6 @@ function addSankeyGraph(id){
 
 function deleteGraph(id){
     $("#o-graph-" + id).remove();
-    graphs[id].parentSelection.removeGraph(id);
+    graphs[id].selection.removeGraph(id);
     delete graphs[id];
 }

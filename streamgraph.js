@@ -3,7 +3,7 @@
  * StreamGraph class used to represent a graph in our application
  */
 class StreamGraph {
-    constructor(id, title, data, selectors, topics, xAxisId){
+    constructor(id, selection, title, data, selectors, topics, xAxisId){
 
         // auto increment iets
         if (id == null){
@@ -23,6 +23,7 @@ class StreamGraph {
             this.getNewTitle();
         }
 
+        this.selection = selection;
         this.title = title;
         this.data = data;
         console.log(this.data);
@@ -155,8 +156,18 @@ class StreamGraph {
             topics[i].setArea(area);
         }
 
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
+
         x.domain(d3.extent(data, function(d) {
-            return d.Perioden}));
+            if (d.Perioden < minDate) {
+                return minDate;
+            } else if (d.Perioden > maxDate){
+                return maxDate;
+            } else {
+                return d.Perioden;
+            }
+        }));
 
         this.g.append("g")
             .attr("class", "axis")
@@ -192,6 +203,8 @@ class StreamGraph {
         }
     }
     showLine(topicId){
+        let minDate = new Date("" + this.selection.from);
+        let maxDate = new Date("" + this.selection.to);
         let topic = this.topics[topicId];
         // topic.setPath(this.g.append("path")
         //     .datum(this.parsedData)
@@ -204,7 +217,9 @@ class StreamGraph {
 
         // add the area
         topic.setAreaPath(this.g.append("path")
-            .data([this.parsedData])
+            .data([this.parsedData.filter(function(d){
+                return d.Perioden >= minDate && d.Perioden <= maxDate;
+            })])
             .attr("class", "area")
             .attr("fill", topic.color)
             .attr("d", topic.area)
@@ -259,7 +274,7 @@ class StreamGraph {
 
 }
 
-function getNewStreamGraph(){
+function getNewStreamGraph(selection){
     let topics = [];
 
     let titles = [
@@ -287,6 +302,7 @@ function getNewStreamGraph(){
 
     let graph = new StreamGraph(
         null,
+        selection,
         "Totaal energieverbruik, normalized",
         streamData,
         // "data/Energiebalans__aanbod__verbruik_29012019_145811.csv",
