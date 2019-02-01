@@ -141,12 +141,14 @@ class LineGraph {
             return d.Perioden}));
 
         this.g.append("g")
+            .attr("class", "axis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain");
         // .remove();
 
         this.g.append("g")
+            .attr("class", "axis")
             .call(d3.axisLeft(y))
             .append("text")
             .attr("fill", "#000")

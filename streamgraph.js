@@ -159,12 +159,14 @@ class StreamGraph {
             return d.Perioden}));
 
         this.g.append("g")
+            .attr("class", "axis")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain");
         // .remove();
 
         this.g.append("g")
+            .attr("class", "axis")
             .call(d3.axisLeft(y))
             .append("text")
             .attr("fill", "#000")
@@ -175,6 +177,7 @@ class StreamGraph {
             .text("Energy (PJ)");
 
         this.g.append("g")
+            .attr("class", "axis")
             .attr("transform", "translate( " + width + ", 0 )")
             .call(d3.axisRight(y))
 
