@@ -219,7 +219,7 @@ function doStuff(){
         sb += "\"" + subjects[subject] + "\"\n";
     }
 
-    console.log(sb);
+    // console.log(sb);
 
 }
 
@@ -320,7 +320,7 @@ function getElementsOfHierarchy(hierarchy){
     return elements;
 }
 
-console.log(getElementsOfHierarchy(hierarchy));
+// console.log(getElementsOfHierarchy(hierarchy));
 
 function getSubHierarchy(hierarchy, key){
     if (hierarchy[key].length !== 0){

@@ -102,7 +102,7 @@ class StreamGraph {
         // Get the dimensions of the SVG
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
-        let margin = { top: 40, right: 20, bottom: 30, left: 50 };
+        let margin = { top: 40, right: 50, bottom: 30, left: 50 };
         let width = svgWidth - margin.left - margin.right;
         let height = svgHeight - margin.top - margin.bottom;
         this.height = height;
@@ -173,6 +173,10 @@ class StreamGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
+
+        this.g.append("g")
+            .attr("transform", "translate( " + width + ", 0 )")
+            .call(d3.axisRight(y))
 
     }
 
@@ -260,9 +264,6 @@ function addStreamGraph(){
         "Totaal aardoliegrondstoffen en producten",
         "Aardgas",
         "Hernieuwbare energie",
-        "Totaal windenergie",
-        "Omgevingsenergie",
-        "Totaal biomassa",
         "Elektriciteit",
         "Warmte",
         "Totaal overige energiedragers"
