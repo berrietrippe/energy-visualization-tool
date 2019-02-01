@@ -47,12 +47,23 @@ function dataSetupCompleted(){
 
 
 class Selection {
-    constructor(id){
+    constructor(id, from = null, to = null){
         // auto increment iets
         if (id == null){
             id = SELECTIONCOUNT;
             SELECTIONCOUNT++;
         }
+
+        if (from == null) {
+            from = 1946;
+        }
+
+        if (to == null) {
+            to = 2017;
+        }
+
+        this.from = from;
+        this.to = to;
 
         this.id = id;
         this.graphs = [];

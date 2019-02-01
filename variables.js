@@ -6,8 +6,10 @@ function getSelectionString(id){
         '            <div class="row">'+
         '                <div class="col p-3 o-menu">'+
         '                    <h5>Selection</h5>'+
-        '                    <label for="year">Year:</label>'+
-        '                    <select name="" id="year"></select>'+
+        '                    <label for="yearFrom">From:</label>'+
+        '                    <input name="" style="width:80px;" id="yearFrom" value="1946"></input>'+
+        '                    <label for="yearTo">To:</label>'+
+        '                    <input name="" style="width:80px;" id="yearTo" value="2017"></input>'+
         '                </div>'+
         '            </div>'+
         '        </div>'+
