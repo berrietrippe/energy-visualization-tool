@@ -1,7 +1,7 @@
 
 
 let selections = [];
-let graphs = [];
+let graphs = {};
 
 let selectionBar = $("#selectorBar");
 let bar = $("#graphAdder");
@@ -63,7 +63,7 @@ class Selection {
         $("#graphAdder-" + this.id).before(getLineGraphString(GRAPHCOUNT));
         let graph = getNewLineGraph();
         graph.parentSelection = this;
-        graphs.push(graph);
+        graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
@@ -71,7 +71,7 @@ class Selection {
         $("#graphAdder-" + this.id).before(getExtendedLineGraphString(GRAPHCOUNT));
         let graph = getNewExtendedLineGraph();
         graph.parentSelection = this;
-        graphs.push(graph);
+        graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
@@ -79,7 +79,7 @@ class Selection {
         $("#graphAdder-" + this.id).before(getStreamGraphString(GRAPHCOUNT));
         let graph = getNewStreamGraph();
         graph.parentSelection = this;
-        graphs.push(graph);
+        graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
@@ -87,7 +87,7 @@ class Selection {
         $("#graphAdder-" + this.id).before(getSankeyGraphString(GRAPHCOUNT));
         let graph = getNewSankeyGraph();
         graph.parentSelection = this;
-        graphs.push(graph);
+        graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
 
@@ -121,5 +121,5 @@ function addSankeyGraph(id){
 function deleteGraph(id){
     $("#o-graph-" + id).remove();
     graphs[id].parentSelection.removeGraph(id);
-    graphs.splice(id, 1);
+    delete graphs[id];
 }

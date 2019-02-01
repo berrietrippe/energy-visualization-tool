@@ -103,7 +103,7 @@ class SankeyGraph {
     setupGraph(data, topics, selector) {
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
-        let margin = { top: 40, right: 20, bottom: 30, left: 20 };
+        let margin = { top: 40, right: 230, bottom: 30, left: 20 };
         let width = svgWidth - margin.left - margin.right;
         let height = svgHeight - margin.top - margin.bottom;
 
@@ -125,6 +125,15 @@ class SankeyGraph {
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")"
             );
+
+        this.svg.append("text")
+            .attr("x", (svgWidth/ 2))
+            .attr("y", (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .attr("fill", "#000")
+            .style("font-size", "16px")
+            .style("text-decoration", "underline")
+            .text(this.title);
 
         let links = this.g.append("g")
             .classed("links", true)

@@ -349,16 +349,30 @@ function updateSelectorList(graphId, selectors, extra = ""){
     }
 }
 
-function closeControls(id){
+function closeControls(id, expand = false){
     $("#controls-" + id).hide();
     $("#o-graph-container-control-" + id).show();
+
+    if (expand){
+        $("#o-col-chart-" + id).addClass("col-12");
+        graphs[id].redrawGraph();
+    } else {
+        let width = $("#controls-" + id).width() - 50;
+        $("#o-graph-" + id).css('margin-right',-width+'px');
+    }
 }
 
-function openControls(id){
+function openControls(id, expand = false){
     $("#controls-" + id).show();
     $("#o-graph-container-control-" + id).hide();
-}
 
+    if (expand){
+        $("#o-col-chart-" + id).removeClass("col-12");
+        graphs[id].redrawGraph();
+    } else {
+        $("#o-graph-" + id).css('margin-right', 0 + 'px');
+    }
+}
 // says hi :)
 function sayHi(){
     console.log("hi");
@@ -470,7 +484,7 @@ function setFileSource(id, path_to_csv){
 
 function selectorChanged(id, selector, extra = 0){
     console.log(graphs);
-    console.log(graphs[id]);
+    console.log(id);
     if (extra == 1){
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value, extra);
     } else {

@@ -77,7 +77,7 @@ function getLineGraphString(id){
             '            </div>'+
             '' +
             '        </div>'+
-            '        <div class="col-9 h-100">'+
+            '        <div id="o-col-chart-' + id + '" class="col-9 h-100">'+
         '                <div class="row pb-3 h-100">'+
         '                    <div id="o-container-chart-' + id + '" class="col o-graph-container h-100 p-3">'+
                 ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
@@ -119,7 +119,7 @@ function getExtendedLineGraphString(id){
             '            </div>'+
             ''+
             '        </div>'+
-            '        <div class="col-9 h-100">'+
+            '        <div  id="o-col-chart-' + id + '"  class="col-9 h-100">'+
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
             '                    <div id="o-container-chart-' + id + '" class="col o-graph-container h-100 p-3">'+
@@ -167,7 +167,7 @@ function getStreamGraphString(id){
             '            </div>'+
             ''+
             '        </div>'+
-            '        <div class="col-9 h-100">'+
+            '        <div  id="o-col-chart-' + id + '" class="col-9 h-100">'+
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
             '                    <div id="o-container-chart-' + id + '" class="o-graph-container col h-100 p-3">'+
@@ -185,7 +185,6 @@ function getStreamGraphString(id){
             '</div>'+
         ''+
         '</div>';
-
 }
 
 
@@ -194,7 +193,7 @@ function getSankeyGraphString(id){
                 '<div class="row h-100"> ' +
                     '<div id="controls-' + id + '" class="col-2 h-100">'+
             '            <div class="o-editor  h-100 p-3 w-100">'+
-                            ' <i class="control fa fa-bars" onclick="closeControls(' + id + ')"></i>' +
+                            ' <i class="control fa fa-bars" onclick="closeControls(' + id + ', true)"></i>' +
             '                <h5>Sankey graph #' + id + '</h5>'+
             '                <hr>'+
             '                <h6>Category</h6>'+
@@ -206,8 +205,8 @@ function getSankeyGraphString(id){
         '                <i class="fa fa-trash" style="cursor:pointer;color:gray;" onclick="deleteGraph(' + id + ')"></i>'+
             '            </div>'+
             '        </div>'+
-            '        <div id="o-graph-container-' + id + '" class="col-10 h-100 o-graph-container">'+
-                        ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
+            '        <div  id="o-col-chart-' + id + '" id="o-graph-container-' + id + '" class="col-10 h-100 o-graph-container">'+
+                        ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ', true)"></i>' +
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
             '                    <div id="o-container-chart-' + id + '" class="col h-100 p-3">'+
