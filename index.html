@@ -37,54 +37,19 @@
     <!--</div>-->
 </div>
 
-<div class="selection">
-    <div class="selection-header pl-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col p-3 o-menu">
-                    <h5>Selection</h5>
-                    <label for="year">Year:</label>
-                    <select name="" id="year"></select>
-                </div>
-            </div>
-        </div>
-    </div>
+<br>
 
-    <div class="selection-body">
-        <div id="graphAdder" class="p-3">
-            <div class="">
-                <div class="chart p-3" onclick="addLineGraph()">
-                        <i class="fa fa-chart-line"></i> <br>
-                        + Add Type I line graph
+<div id="selectorBar">
+    <div class="container-fluid px-5">
+        <div class="row">
+            <div class="col-2">
+                <div class="o-visualization p-3" style="cursor:pointer" onclick="addSelection()">
+                    <div>+ Add selection</div>
                 </div>
             </div>
-            <div class="">
-                <div class="chart p-3" onclick="addExtendedLineGraph()">
-                        <i class="fa fa-chart-line"></i> <br>
-                        + Add Type II line graph
-                </div>
-            </div>
-            <div class="">
-                <div class="chart p-3" onclick="addStreamGraph()">
-                        <i class="fa fa-chart-area"></i> <br>
-                        + Add stream graph
-                </div>
-            </div>
-            <div class="">
-                <div class="chart p-3" onclick="addSankeyGraph()">
-                        <i class="fa fa-wind"></i> <br>
-                        + Add Sankey graph
-                </div>
-            </div>
-            <!--<div class="col">-->
-            <!--<div class="o-visualization p-3" onclick="addLineGraph()">-->
-            <!--<div style="text-decoration: underline; cursor: pointer;">+ Add Sankey graph</div>-->
-            <!--</div>-->
-            <!--</div>-->
         </div>
     </div>
 </div>
-
 
     <!--<div class="row h-50 pt-3">-->
         <!--<div class="col h-100 p-3">-->

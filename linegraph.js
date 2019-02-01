@@ -298,7 +298,7 @@ class Topic {
     }
 }
 
-function addLineGraph(){
+function getNewLineGraph(){
     let topics = [];
 
     let titles = ["Perioden",
@@ -317,8 +317,6 @@ function addLineGraph(){
         topics.push(new Topic(titles[i], i <= 2, getRandomColor(i)));
     }
 
-    bar.before(getLineGraphString(GRAPHCOUNT));
-
     let graph = new LineGraph(
         null,
         "Totaal energiedragers",
@@ -329,7 +327,5 @@ function addLineGraph(){
         1
     );
 
-    graphs.push(graph);
-
-    addConsoleMessage("Succesfully set-up line-graph!");
+    return graph;
 }

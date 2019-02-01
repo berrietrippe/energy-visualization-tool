@@ -262,7 +262,7 @@ class ExtendedLineGraph {
 
 }
 
-function addExtendedLineGraph(){
+function getNewExtendedLineGraph(){
     let topics = [];
 
     let titles = [
@@ -279,10 +279,6 @@ function addExtendedLineGraph(){
         topics.push(new Topic(titles[i], i <= 3, getRandomColor(i)));
     }
 
-    let bar = $("#graphAdder");
-
-    bar.before(getExtendedLineGraphString(GRAPHCOUNT));
-
     let selectors = [
         "Totaal energieverbruik",
         "Winning",
@@ -292,7 +288,7 @@ function addExtendedLineGraph(){
         "Bunkering",
     ];
 
-    graphs.push(new ExtendedLineGraph(
+    let graph = new ExtendedLineGraph(
         null,
         "Totaal energieverbruik",
         extendedData,
@@ -300,8 +296,8 @@ function addExtendedLineGraph(){
         selectors,
         topics,
         0
-    ));
+    );
 
-    addConsoleMessage("Succesfully set-up extended line graph!");
+    return graph;
 }
 

@@ -349,6 +349,15 @@ function updateSelectorList(graphId, selectors, extra = ""){
     }
 }
 
+function closeControls(id){
+    $("#controls-" + id).hide();
+    $("#o-graph-container-control-" + id).show();
+}
+
+function openControls(id){
+    $("#controls-" + id).show();
+    $("#o-graph-container-control-" + id).hide();
+}
 
 // says hi :)
 function sayHi(){
@@ -460,6 +469,8 @@ function setFileSource(id, path_to_csv){
 }
 
 function selectorChanged(id, selector, extra = 0){
+    console.log(graphs);
+    console.log(graphs[id]);
     if (extra == 1){
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value, extra);
     } else {
@@ -467,3 +478,4 @@ function selectorChanged(id, selector, extra = 0){
     }
 
 }
+

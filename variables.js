@@ -1,8 +1,64 @@
+function getSelectionString(id){
+
+    let selection = '<div class="selection">'+
+        '    <div class="selection-header pl-5">'+
+        '        <div class="container-fluid">'+
+        '            <div class="row">'+
+        '                <div class="col p-3 o-menu">'+
+        '                    <h5>Selection</h5>'+
+        '                    <label for="year">Year:</label>'+
+        '                    <select name="" id="year"></select>'+
+        '                </div>'+
+        '            </div>'+
+        '        </div>'+
+        '    </div>'+
+        ''+
+        '    <div class="selection-body">'+
+        '        <div id="graphAdder-' + id + '" class="graphAdder p-3">'+
+        '            <div class="">'+
+        '                <div class="chart p-3" onclick="addLineGraph('+ id + ')">'+
+        '                        <i class="fa fa-chart-line"></i> <br>'+
+        '                        + Add Type I line graph'+
+        '                </div>'+
+        '            </div>'+
+        '            <div class="">'+
+        '                <div class="chart p-3" onclick="addExtendedLineGraph('+ id + ')">'+
+        '                        <i class="fa fa-chart-line"></i> <br>'+
+        '                        + Add Type II line graph'+
+        '                </div>'+
+        '            </div>'+
+        '            <div class="">'+
+        '                <div class="chart p-3" onclick="addStreamGraph('+ id + ')">'+
+        '                        <i class="fa fa-chart-area"></i> <br>'+
+        '                        + Add stream graph'+
+        '                </div>'+
+        '            </div>'+
+        '            <div class="">'+
+        '                <div class="chart p-3" onclick="addSankeyGraph('+ id + ')">'+
+        '                        <i class="fa fa-wind"></i> <br>'+
+        '                        + Add Sankey graph'+
+        '                </div>'+
+        '            </div>'+
+        '            <!--<div class="col">-->'+
+        '            <!--<div class="o-visualization p-3" onclick="addLineGraph()">-->'+
+        '            <!--<div style="text-decoration: underline; cursor: pointer;">+ Add Sankey graph</div>-->'+
+        '            <!--</div>-->'+
+        '            <!--</div>-->'+
+        '        </div>'+
+        '    </div>'+
+        '</div>';
+
+        return selection;
+}
+
+
+
 function getLineGraphString(id){
-    return  '<div class="o-graph">' +
-                '<div class="row h-100"> ' +
-                    '<div class="col-3 h-100">'+
+    return  '<div id="o-graph-' + id + '" class="o-graph">' +
+                '<div  class="row h-100"> ' +
+                    '<div id="controls-' + id + '" class="col-3 h-100">'+
             '            <div class="o-editor h-100 p-3 w-100">'+
+                            ' <i class="control fa fa-bars" onclick="closeControls(' + id + ')"></i>' +
             '                <h5>Type I line graph #' + id + '</h5>'+
             '                <hr>'+
             '                <h6>Kind of energy</h6>'+
@@ -14,12 +70,17 @@ function getLineGraphString(id){
             '                <ul id="topicList-' + id + '" style="font-size:0.8rem;" class="o-selector-list">'+
             ''+
             '                </ul>'+
+            '                <hr>'+
+            '                <h6>Actions</h6>'+
+            '                <i class="fa fa-trash" style="cursor:pointer;color:gray;" onclick="deleteGraph(' + id + ')"></i>'+
+
             '            </div>'+
-            ''+
+            '' +
             '        </div>'+
             '        <div class="col-9 h-100">'+
         '                <div class="row pb-3 h-100">'+
-        '                    <div id="o-container-chart-' + id + '" class="col h-100 p-3">'+
+        '                    <div id="o-container-chart-' + id + '" class="col o-graph-container h-100 p-3">'+
+                ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
         '                        <!--<div class="chart h-100 w-100">-->'+
         '                            <!--<h5>Total energy production per year</h5>-->'+
         '                            <!--<!–<div class="o-axis o-y-axis"><div class="o-label">Energy production</div></div>–>-->'+
@@ -36,10 +97,11 @@ function getLineGraphString(id){
 }
 
 function getExtendedLineGraphString(id){
-    return  '<div class="o-graph o-graph-medium">' +
+    return  '<div id="o-graph-' + id + '" class="o-graph o-graph-medium">' +
                 '<div class="row h-100"> ' +
-                    '<div class="col-3 h-100 p-3">'+
+                    '<div id="controls-' + id + '" class="col-3 h-100 p-3">'+
             '            <div class="o-editor  h-100 p-3 w-100">'+
+        ' <i class="control fa fa-bars" onclick="closeControls(' + id + ')"></i>' +
             '                <h5>Type II line graph #' + id + '</h5>'+
             '                <hr>'+
             '                <h6>Category</h6>'+
@@ -51,13 +113,17 @@ function getExtendedLineGraphString(id){
             '                <ul id="topicList-' + id + '" style="font-size:0.8rem; word-break:break-word;" class="o-selector-list">'+
             ''+
             '                </ul>'+
+        '                <hr>'+
+        '                <h6>Actions</h6>'+
+        '                <i class="fa fa-trash" style="cursor:pointer;color:gray;" onclick="deleteGraph(' + id + ')"></i>'+
             '            </div>'+
             ''+
             '        </div>'+
             '        <div class="col-9 h-100">'+
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
-            '                    <div id="o-container-chart-' + id + '" class="col h-100 p-3">'+
+            '                    <div id="o-container-chart-' + id + '" class="col o-graph-container h-100 p-3">'+
+        ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
             '                        <!--<div class="chart h-100 w-100">-->'+
             '                            <!--<h5>Total energy production per year</h5>-->'+
             '                            <!--<!–<div class="o-axis o-y-axis"><div class="o-label">Energy production</div></div>–>-->'+
@@ -79,10 +145,11 @@ function getExtendedLineGraphString(id){
 }
 
 function getStreamGraphString(id){
-    return  '<div class="o-graph o-graph-medium">' +
+    return  '<div id="o-graph-' + id + '" class="o-graph o-graph-medium">' +
                 '<div class="row h-100"> ' +
-                    '<div class="col-3 h-100 p-3">'+
+                    '<div id="controls-' + id + '"  class="col-3 h-100 p-3">'+
             '            <div class="o-editor  h-100 p-3 w-100">'+
+        ' <i class="control fa fa-bars" onclick="closeControls(' + id + ')"></i>' +
             '                <h5>Stream graph #' + id + '</h5>'+
             '                <hr>'+
             '                <h6>Category</h6>'+
@@ -94,13 +161,17 @@ function getStreamGraphString(id){
             '                <ul id="topicList-' + id + '" style="font-size:0.8rem;" class="o-selector-list">'+
             ''+
             '                </ul>'+
+        '                <hr>'+
+        '                <h6>Actions</h6>'+
+        '                <i class="fa fa-trash" style="cursor:pointer;color:gray;" onclick="deleteGraph(' + id + ')"></i>'+
             '            </div>'+
             ''+
             '        </div>'+
             '        <div class="col-9 h-100">'+
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
-            '                    <div id="o-container-chart-' + id + '" class="col h-100 p-3">'+
+            '                    <div id="o-container-chart-' + id + '" class="o-graph-container col h-100 p-3">'+
+        ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
             '                        <!--<div class="chart h-100 w-100">-->'+
             '                            <!--<h5>Total energy production per year</h5>-->'+
             '                            <!--<!–<div class="o-axis o-y-axis"><div class="o-label">Energy production</div></div>–>-->'+
@@ -119,19 +190,24 @@ function getStreamGraphString(id){
 
 
 function getSankeyGraphString(id){
-    return  '<div class="o-graph o-graph-large">' +
+    return  '<div id="o-graph-' + id + '" class="o-graph o-graph-large">' +
                 '<div class="row h-100"> ' +
-                    '<div class="col-2 h-100">'+
+                    '<div id="controls-' + id + '" class="col-2 h-100">'+
             '            <div class="o-editor  h-100 p-3 w-100">'+
+                            ' <i class="control fa fa-bars" onclick="closeControls(' + id + ')"></i>' +
             '                <h5>Sankey graph #' + id + '</h5>'+
             '                <hr>'+
             '                <h6>Category</h6>'+
             '                <select style="max-width:100%;" id="selectorList1-' + id + '" onchange="selectorChanged(' + id + ', this, 1)">'+
             '                </select>'+
             '                <hr>'+
+        '                <hr>'+
+        '                <h6>Actions</h6>'+
+        '                <i class="fa fa-trash" style="cursor:pointer;color:gray;" onclick="deleteGraph(' + id + ')"></i>'+
             '            </div>'+
             '        </div>'+
-            '        <div class="col-10 h-100">'+
+            '        <div id="o-graph-container-' + id + '" class="col-10 h-100 o-graph-container">'+
+                        ' <i id="o-graph-container-control-' + id + '" class="control fa fa-bars" onclick="openControls(' + id + ')"></i>' +
             '            <div class="container-fluid h-100">'+
             '                <div class="row pb-3 h-100">'+
             '                    <div id="o-container-chart-' + id + '" class="col h-100 p-3">'+

@@ -259,7 +259,7 @@ class StreamGraph {
 
 }
 
-function addStreamGraph(){
+function getNewStreamGraph(){
     let topics = [];
 
     let titles = [
@@ -276,8 +276,6 @@ function addStreamGraph(){
         topics.push(new Topic(titles[i], true, getRandomColor(i)));
     }
 
-    bar.before(getStreamGraphString(GRAPHCOUNT));
-
     let selectors = [
         "Totaal energieverbruik",
         "Winning",
@@ -287,7 +285,7 @@ function addStreamGraph(){
         "Bunkering",
     ];
 
-    graphs.push(new StreamGraph(
+    let graph = new StreamGraph(
         null,
         "Totaal energieverbruik, normalized",
         streamData,
@@ -295,8 +293,8 @@ function addStreamGraph(){
         selectors,
         topics,
         0
-    ));
+    );
 
-    addConsoleMessage("Succesfully set-up stream-graph!");
+    return graph;
 }
 
