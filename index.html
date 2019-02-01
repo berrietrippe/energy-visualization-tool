@@ -8,14 +8,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
     <title>2IMV20 Energy Visualization</title>
 </head>
 <body>
-<div class="container-fluid h-100 px-5">
-    <div class="row">
-        <div class="col pt-4" style="display: flex; align-items: center">
+<div class="container-fluid px-5">
+        <div class="col pt-4 pb-3" style="display: flex; align-items: center">
             <img src="img/1200px-Flag_of_the_Netherlands.svg.png" style="display:inline-block; width:40px; margin-right:10px; margin-top:-7px; height:30px;" alt="">
             <h2 style="display: inline-block;">Dutch Energy Visualization tool</h2>
         </div>
@@ -23,7 +23,7 @@
     <!--<div class="row">-->
         <!--<div class="col p-3">-->
             <!--<div class="s-border p-2">-->
-                <!--<button type="button" class="btn btn-outline-primary">+ new graph</button>-->
+                <!--<button type="button" class="btn btn-outline-primary">+ new selection</button>-->
                 <!--&lt;!&ndash;<button type="button" class="btn btn-primary">Primary</button>&ndash;&gt;-->
                 <!--&lt;!&ndash;<button type="button" class="btn btn-secondary">Secondary</button>&ndash;&gt;-->
                 <!--&lt;!&ndash;<button type="button" class="btn btn-success">Success</button>&ndash;&gt;-->
@@ -35,34 +35,55 @@
             <!--</div>-->
         <!--</div>-->
     <!--</div>-->
-    <div id="graphAdder" class="row">
+</div>
 
-        <div class="col">
-            <div class="o-visualization p-3" onclick="addLineGraph()">
-                <div style="text-decoration: underline; cursor: pointer;">+ Add line graph</div>
+<div class="selection">
+    <div class="selection-header pl-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col p-3 o-menu">
+                    <h5>Graph selection</h5>
+                    <label for="year">Year:</label>
+                    <select name="" id="year"></select>
+                </div>
             </div>
         </div>
-        <div class="col">
-            <div class="o-visualization p-3" onclick="addExtendedLineGraph()">
-                <div style="text-decoration: underline; cursor: pointer;">+ Add extended line graph</div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="o-visualization p-3" onclick="addStreamGraph()">
-                <div style="text-decoration: underline; cursor: pointer;">+ Add stream graph</div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="o-visualization p-3" onclick="addSankeyGraph()">
-                <div style="text-decoration: underline; cursor: pointer;">+ Add sankey graph</div>
-            </div>
-        </div>
-        <!--<div class="col">-->
-            <!--<div class="o-visualization p-3" onclick="addLineGraph()">-->
-                <!--<div style="text-decoration: underline; cursor: pointer;">+ Add Sankey graph</div>-->
-            <!--</div>-->
-        <!--</div>-->
     </div>
+
+    <div class="selection-body">
+        <div id="graphAdder" class="p-3">
+            <div class="">
+                <div class="chart p-3" onclick="addLineGraph()">
+                        <i class="fa fa-chart-line"></i> <br>
+                        + Add Type I line graph
+                </div>
+            </div>
+            <div class="">
+                <div class="chart p-3" onclick="addExtendedLineGraph()">
+                        <i class="fa fa-chart-line"></i> <br>
+                        + Add Type II line graph
+                </div>
+            </div>
+            <div class="">
+                <div class="chart p-3" onclick="addStreamGraph()">
+                        <i class="fa fa-chart-area"></i> <br>
+                        + Add stream graph
+                </div>
+            </div>
+            <div class="">
+                <div class="chart p-3" onclick="addSankeyGraph()">
+                        <i class="fa fa-wind"></i> <br>
+                        + Add Sankey graph
+                </div>
+            </div>
+            <!--<div class="col">-->
+            <!--<div class="o-visualization p-3" onclick="addLineGraph()">-->
+            <!--<div style="text-decoration: underline; cursor: pointer;">+ Add Sankey graph</div>-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
 
 
     <!--<div class="row h-50 pt-3">-->

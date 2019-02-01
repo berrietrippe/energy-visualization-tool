@@ -1,6 +1,7 @@
 body, html {
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  overflow: hidden; }
 
 .o-visualization {
   width: 100%;
@@ -65,9 +66,6 @@ body, html {
   color: rgba(0, 0, 0, 0);
   vertical-align: bottom; }
 
-.line-chart {
-  border: 1px solid lightgray; }
-
 .s-border {
   border: 1px solid lightgray; }
 
@@ -102,5 +100,66 @@ body, html {
 
 .axis {
   font-size: 0.8rem; }
+
+.selection .selection-header {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .selection .selection-header > .container-fluid {
+    border: 1px solid lightgray;
+    border-bottom: none; }
+.selection .selection-body {
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  width: 100%;
+  height: 700px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  white-space: nowrap; }
+  .selection .selection-body > * {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 3rem; }
+  .selection .selection-body .o-graph {
+    border-left: 10px solid lightgray;
+    width: 1000px;
+    height: 100%; }
+    .selection .selection-body .o-graph.o-graph-medium {
+      width: 1200px; }
+    .selection .selection-body .o-graph.o-graph-large {
+      width: 1400px; }
+    .selection .selection-body .o-graph .o-editor {
+      border-right: 1px solid lightgray; }
+  .selection .selection-body #graphAdder {
+    padding-left: 3rem !important;
+    height: 100%;
+    width: 250px;
+    white-space: normal;
+    box-sizing: border-box; }
+    .selection .selection-body #graphAdder > div {
+      display: inline-block;
+      height: 23%;
+      margin-bottom: 2%;
+      width: 100%; }
+    .selection .selection-body #graphAdder .chart {
+      cursor: pointer;
+      height: 100%;
+      text-align: center;
+      background-color: #d9d9d9;
+      color: white; }
+      .selection .selection-body #graphAdder .chart i {
+        margin-top: 15px;
+        font-size: 60px; }
+      .selection .selection-body #graphAdder .chart:hover {
+        background-color: #ababab; }
+
+.o-menu {
+  border-left: 10px solid gray;
+  display: flex;
+  align-items: center; }
+  .o-menu > * {
+    display: inline-block;
+    margin-right: 1rem; }
 
 /*# sourceMappingURL=style.css.map */

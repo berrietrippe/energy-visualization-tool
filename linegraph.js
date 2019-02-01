@@ -95,7 +95,7 @@ class LineGraph {
         // Get the dimensions of the SVG
         let svgWidth = $(selector).width();
         let svgHeight = $(selector).height();
-        let margin = { top: 40, right: 20, bottom: 30, left: 50 };
+        let margin = { top: 40, right: 30, bottom: 30, left: 70 };
         let width = svgWidth - margin.left - margin.right;
         let height = svgHeight - margin.top - margin.bottom;
         // var svgWidth = 1000, svgHeight = 600;

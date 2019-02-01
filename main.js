@@ -34,7 +34,7 @@ function setupData(){
 function dataSetupCompleted(){
     // addExtendedLineGraph();
     // addStreamGraph();
-    // addLineGraph();
-    addSankeyGraph();
+    addLineGraph();
+    // addSankeyGraph();
 }
 
