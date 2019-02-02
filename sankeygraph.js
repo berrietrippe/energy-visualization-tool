@@ -176,7 +176,7 @@ class SankeyGraph {
             .attr("dy", ".35em")
             .text(function(d) {
                 if (d.value > 0){
-                    return d.id;
+                    return translate(d.id);
                     }
 
             })

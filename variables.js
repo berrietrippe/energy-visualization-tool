@@ -362,6 +362,118 @@ let hierarchy = { "Totaal energiedragers" :
     }
 };
 
+function translate(string){
+    let translation = translations[string];
+    if (translation != undefined){
+        return translation;
+    } else {
+        return string;
+    }
+}
+
+let translations = {
+    "Energiedragers" : "Energy Carriers",
+    "Perioden" : "Periods",
+    "Totaal aanbod" : "Total offer",
+    "Winning" : "Production",
+    "Invoer" : "Import",
+    "Uitvoer" : "Export",
+    "Invoersaldo" : "Import balance",
+    "Bunkering" : "Bunkering",
+    "Energieaanbod/Voorraadmutatie (PJ)" : "Energy offer/Stock mutation (PJ)",
+    "Statistische verschillen (PJ)" : "Statistical differences (PJ)",
+    "Totaal" : "Total",
+    "Totaal energiedragers" : "Total energy carriers",
+    "Totaal kool en koolproducten" : "Total coal and coal products",
+    "Steenkool en bruinkool" : "Coal and lignite",
+    "Totaal steenkool" : "Total Coal",
+    "Antraciet" : "Anthracite",
+    "Cokeskool" : "Coke",
+    "Ketelkolen" : "Kettle coals",
+    "Bruinkool" : "Lignite",
+    "Totaal koolproducten" : "Total coal products",
+    "Cokesovencokes" : "Cokesovencokes",
+    "Bruinkoolbriketten" : "Lignite briquettes",
+    "Steenkoolbriketten" : "Coal briquettes",
+    "Steenkoolteer" : "Coal tar",
+    "Gasfabriekgas" : "Gas factory gas",
+    "Cokesovengas" : "Cokesovengas",
+    "Hoogovengas" : "Blast furnace gas",
+    "Totaal aardoliegrondstoffen en producten" : "Total petroleum materials and products",
+    "Totaal aardoliegrondstoffen" : "Total petroleum materials",
+    "Ruwe aardolie" : "Raw petroleum",
+    "Aardgascondensaat" : "Natural gas condensate",
+    "Additieven" : "Additives",
+    "Overige aardoliegrondstoffen" : "Other petroleum materials",
+    "Totaal aardolieproducten" : "Total petroleum products",
+    "Restgassen uit olie" : "Residual gases from oil",
+    "Lpg" : "LPG",
+    "Nafta" : "Naphta",
+    "Motorbenzine" : "Engine fuel",
+    "Jetfuel op benzinebasis" : "Jetfuel on petroleum base",
+    "Vliegtuigbenzine" : "Airplane fuel",
+    "Vliegtuigkerosine" : "Airplane kerosene",
+    "Overige kerosine (petroleum)" : "Other kerosene (petroleum)",
+    "Gas-, dieselolie en lichte stookolie" : "Gas-, diesel oil and light fuel oil",
+    "Zware stookolie" :
+        "Heavy fuel oil",
+    "Terpentine en speciale benzine" :
+        "Turpentine and special gasoline",
+    "Smeermiddelen" :
+        "Lubricants",
+    "Bitumen" :
+        "Bitumen",
+    "Minerale wassen" :
+        "Mineral waxes",
+    "Petroleumcokes" :
+        "Petroleumcokes",
+    "Overige aardolieproducten" :
+        "Other petroleum products",
+    "Aardgas" :
+        "Natural gas",
+    "Hernieuwbare energie" :
+        "Renewable energy",
+    "Waterkracht" :
+        "Hydropower",
+    "Totaal windenergie" :
+        "Total wind energy",
+    "Windenergie op land" :
+        "Wind energy on land",
+    "Windenergie op zee" :
+        "Wind energy on sea",
+    "Totaal zonne-energie" :
+        "Total solar energy",
+    "Zonnewarmte" :
+        "Solar heat",
+    "Zonnestroom" :
+        "Solar power",
+    "Aardwarmte" :
+        "Earth heat",
+    "Omgevingsenergie" :
+        "Environmental energy",
+    "Totaal biomassa" :
+        "Total biomass",
+    "Hernieuwbaar huishoudelijk afval" :
+        "Renewable household waste",
+    "Vaste en vloeibare biomassa" :
+        "Solid and liquid biomass",
+    "Biogas" : "Biogas",
+    "Elektriciteit" :
+        "Electricity",
+    "Warmte" :
+        "Heat",
+    "Totaal overige energiedragers" :
+        "Total other energy carriers",
+    "Kernenergie" :
+        "Nuclear energy",
+    "Niet biogeen huish. afval en reststoom" :
+        "Non-biogenic housh. waste and residual steam",
+    "Energie uit overige bronnen" :
+        "Energy from other sources",
+    "Totaal energieverbruik" :
+        "Total energy usage"
+};
+
 console.log("Hierarchy:");
 console.log(hierarchy);
 

@@ -337,15 +337,16 @@ function updateTopicList(graphId, topics, xAxis, checkboxes = true){
         }
 
         let checkboxEnabled = checkboxes? "<input type='checkbox' " + checked + " onclick='updateTopics(" + graphId + "," + i + ")'></input>" : "";
-        $("#topicList-" + graphId).append("<li style='word-break:break-word;white-space: normal'>" + checkboxEnabled + topics[i].name + "<div class='c-bullet' style='background-color: " + topics[i].color + ";'> </div></li>");
+        $("#topicList-" + graphId).append("<li style='word-break:break-word;white-space: normal'>" + checkboxEnabled + translate(topics[i].name) + "<div class='c-bullet' style='background-color: " + topics[i].color + ";'> </div></li>");
 
     }
+
 }
 
 function updateSelectorList(graphId, selectors, extra = ""){
     // $("#selectorList-" + graphId).html(" ");
     for (let i = 0; i < selectors.length; i++){
-        $("#selectorList" + extra + "-" + graphId).append("<option value=" + i + ">" + selectors[i] + "</option>");
+        $("#selectorList" + extra + "-" + graphId).append("<option value=" + i + ">" + translate(selectors[i]) + "</option>");
     }
 }
 
