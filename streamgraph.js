@@ -296,7 +296,6 @@ function getNewStreamGraph(selection){
         "Winning",
         "Invoer",
         "Uitvoer",
-        "Invoersaldo",
         "Bunkering",
     ];
 

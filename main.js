@@ -93,10 +93,10 @@ class Selection {
     addSankeyGraphToSelection(){
         $("#graphAdder-" + this.id).before(getSankeyGraphString(GRAPHCOUNT));
         let graph = getNewSankeyGraph(this);
-        graph.parentSelection = this;
         graphs[graph.id] = graph;
         this.graphs.push(graph.id);
     }
+
 
     removeGraph(id){
         this.graphs.splice(id, 1);
