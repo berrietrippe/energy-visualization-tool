@@ -467,7 +467,7 @@ let translations = {
     "Kernenergie" :
         "Nuclear energy",
     "Niet biogeen huish. afval en reststoom" :
-        "Non-biogenic housh. waste and residual steam",
+        "Non-biogenic house. waste and residual steam",
     "Energie uit overige bronnen" :
         "Energy from other sources",
     "Totaal energieverbruik" :
