@@ -180,7 +180,6 @@ function normalizeData(data){
 
     topics.reverse();
 
-    console.log(data);
     for (let selector in data){
         for (let i = 0; i < data[selector].length; i++){
             if (!data[selector][i]["Normalized"]){
@@ -374,6 +373,7 @@ function openControls(id, expand = false){
         $("#o-graph-" + id).css('margin-right', 0 + 'px');
     }
 }
+
 // says hi :)
 function sayHi(){
     console.log("hi");
@@ -474,19 +474,14 @@ function getRandomColor(i = null){
     return colorArray[i%colorArray.length];
 }
 
-function getD3Color(name){
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-    return name => color(name.replace(/ .*/, ""));
-}
-
-function setFileSource(id, path_to_csv){
-    $("#o-filename-" + id).html(path_to_csv);
-}
-
+/**
+ *
+ * @param id
+ * @param selector
+ * @param extra
+ */
 function selectorChanged(id, selector, extra = 0){
-    console.log(graphs);
-    console.log(id);
-    if (extra == 1){
+    if (extra === 1){
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value, extra);
     } else {
         graphs[id].selectorCallback(selector.options[selector.selectedIndex].value);
@@ -494,6 +489,12 @@ function selectorChanged(id, selector, extra = 0){
 
 }
 
+/**
+ *
+ * @param element
+ * @param id
+ * @param fromTo
+ */
 function updateRangeSelector(element, id, fromTo){
     selections[id].updateRange(fromTo, element.value);
 }

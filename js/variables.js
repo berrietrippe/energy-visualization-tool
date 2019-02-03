@@ -234,56 +234,6 @@ function getSankeyGraphString(id){
 
 }
 
-
-//
-// this.svg.append("rect")
-//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-//     .attr("class", "overlay")
-//     .attr("width", width)
-//     .attr("height", height)
-//     // when the mouse enters the canvas, show the line
-//     .on("mouseover", function() {
-//         d3.select(".mouse-line")
-//             .style("opacity", "1");
-//     })
-//     // remove the line when leaving canvas
-//     .on("mouseout", function() {
-//         d3.select(".mouse-line")
-//             .style("opacity", "0");
-//
-//     })
-//     .on("mousemove", function() {
-//         let mouse = d3.mouse(this);
-//         d3.select(".mouse-line")
-//             .attr("d", function() {
-//                 let d = "M" + mouse[0] + "," + height;
-//                 d += " " + mouse[0] + "," + 0;
-//                 return d;
-//             });
-//
-//         // console.log(x.invert(d3.mouse(this)[0]))
-//     });
-//
-// this.g.append("path") // this is the black vertical line to follow mouse
-//     .attr("class", "mouse-line")
-//     .style("stroke", "black")
-//     .style("stroke-width", "1px")
-//     .style("opacity", "0");
-
-
-function doStuff(){
-    let subjects = ["Totaal energiedragers", "Totaal kool en koolproducten", "Steenkool en bruinkool", "Totaal steenkool", "Antraciet", "Cokeskool", "Ketelkolen", "Bruinkool", "Totaal koolproducten", "Cokesovencokes", "Bruinkoolbriketten", "Steenkoolbriketten", "Steenkoolteer", "Gasfabriekgas", "Cokesovengas", "Hoogovengas", "Totaal aardoliegrondstoffen en producten", "Totaal aardoliegrondstoffen", "Ruwe aardolie", "Aardgascondensaat", "Additieven", "Overige aardoliegrondstoffen", "Totaal aardolieproducten", "Restgassen uit olie", "Lpg", "Nafta", "Motorbenzine", "Jetfuel op benzinebasis", "Vliegtuigbenzine", "Vliegtuigkerosine", "Overige kerosine (petroleum)", "Gas-, dieselolie en lichte stookolie", "Zware stookolie", "Terpentine en speciale benzine", "Smeermiddelen", "Bitumen", "Minerale wassen", "Petroleumcokes", "Overige aardolieproducten", "Aardgas", "Hernieuwbare energie", "Waterkracht", "Totaal windenergie", "Windenergie op land", "Windenergie op zee", "Totaal zonne-energie", "Zonnewarmte", "Zonnestroom", "Aardwarmte", "Omgevingsenergie", "Totaal biomassa", "Hernieuwbaar huishoudelijk afval", "Vaste en vloeibare biomassa", "Biogas", "Elektriciteit", "Warmte", "Totaal overige energiedragers", "Kernenergie", "Niet biogeen huish. afval en reststoom", "Energie uit overige bronnen"];
-    // stringbuilder
-    let sb = "";
-
-    for (let subject in subjects){
-        sb += "\"" + subjects[subject] + "\"\n";
-    }
-
-    // console.log(sb);
-
-}
-
 let hierarchy = { "Totaal energiedragers" :
     {
         "Totaal kool en koolproducten" :
@@ -474,9 +424,11 @@ let translations = {
         "Total energy usage"
 };
 
-console.log("Hierarchy:");
-console.log(hierarchy);
-
+/**
+ *
+ * @param hierarchy
+ * @returns {Array}
+ */
 function getElementsOfHierarchy(hierarchy){
     let elements = [];
 
@@ -491,12 +443,4 @@ function getElementsOfHierarchy(hierarchy){
     }
 
     return elements;
-}
-
-// console.log(getElementsOfHierarchy(hierarchy));
-
-function getSubHierarchy(hierarchy, key){
-    if (hierarchy[key].length !== 0){
-        return hierarchy[key];
-    }
 }

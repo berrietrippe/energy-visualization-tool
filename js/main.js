@@ -1,5 +1,3 @@
-
-
 let selections = [];
 let graphs = {};
 
@@ -22,24 +20,21 @@ $(document).ready(function(){
 });
 
 function setupData(){
+
+    // Read CSV
     d3.csv(CSV_PATH, function(data){
+
         parseLineData(data);
         extendedData = parseExtendedData(data);
         streamData = parseStreamData(data);
-        console.log(lineData);
-        console.log(extendedData);
-        console.log(streamData);
+
+        // Once completed, do the other stuff
         dataSetupCompleted();
     });
 
-    doStuff();
 }
 
 function dataSetupCompleted(){
-    // addExtendedLineGraph();
-    // addStreamGraph();
-    // addLineGraph();
-    // addSankeyGraph();
     addSelection();
     addLineGraph(0);
 }
@@ -108,9 +103,6 @@ class Selection {
         } else {
             this.to = value;
         }
-        console.log("Selection " + this.id + ":");
-        console.log(this.from);
-        console.log(this.to);
 
         for (let graph in this.graphs){
             graphs[this.graphs[graph]].redrawGraph();
