@@ -1,5 +1,5 @@
-# 2IMV20
-Visualization web application for the course 2IMV20 Visualization. 
+# Energy visualization tool
+Visualization web application for the course 2IMV20 Visualization offered by the University of Technology in Eindhoven.
 
 ![application](https://i.imgur.com/SG6EFuC.jpg).  
 
