@@ -1,5 +1,6 @@
 # Energy visualization tool
-Visualization web application for the course 2IMV20 Visualization offered by the University of Technology in Eindhoven.
+Visualization web application for the course [2IMV20](https://www.win.tue.nl/~mwestenb/visualization.html) 
+Visualization offered by the [University of Technology in Eindhoven](https://www.tue.nl/en/).
 
 ![application](https://i.imgur.com/SG6EFuC.jpg).  
 
