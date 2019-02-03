@@ -171,40 +171,6 @@ class LineGraph {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("Energy (PJ)");
-        //
-        // this.svg.append("rect")
-        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        //     .attr("class", "overlay")
-        //     .attr("width", width)
-        //     .attr("height", height)
-        //     // when the mouse enters the canvas, show the line
-        //     .on("mouseover", function() {
-        //         d3.select(".mouse-line")
-        //             .style("opacity", "1");
-        //     })
-        //     // remove the line when leaving canvas
-        //     .on("mouseout", function() {
-        //         d3.select(".mouse-line")
-        //             .style("opacity", "0");
-        //
-        //     })
-        //     .on("mousemove", function() {
-        //         let mouse = d3.mouse(this);
-        //         d3.select(".mouse-line")
-        //             .attr("d", function() {
-        //                 let d = "M" + mouse[0] + "," + height;
-        //                 d += " " + mouse[0] + "," + 0;
-        //                 return d;
-        //             });
-        //
-        //         // console.log(x.invert(d3.mouse(this)[0]))
-        //     });
-        //
-        // this.g.append("path") // this is the black vertical line to follow mouse
-        //     .attr("class", "mouse-line")
-        //     .style("stroke", "black")
-        //     .style("stroke-width", "1px")
-        //     .style("opacity", "0");
 
     }
 
