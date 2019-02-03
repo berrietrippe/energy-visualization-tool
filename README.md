@@ -9,7 +9,7 @@ Visualization offered by the [University of Technology in Eindhoven](https://www
 First clone the repository either using the GitHub desktop tool or using `git` in the command line:
 
 ```
-$ git clone https://github.com/berrietrippe/2IMV20.git
+$ git clone https://github.com/berrietrippe/energy-visualization-tool.git
 ```
 
 To run the application it is advised to run a local web server. Node's https-server is recommended:
